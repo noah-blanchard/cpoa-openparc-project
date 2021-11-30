@@ -1,2 +1,3 @@
-# cpoa-s3
+# Projet CPOA
 
+**Groupe :** Jolan Thomassin, Antonin Dehu, Manoël Nohra, Noah Blanchard
