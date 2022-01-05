@@ -20,4 +20,30 @@ public class Arbitrage {
         this.idArbitre = idArbitre_;
         this.chaise = chaise_;
     }
+
+    public int getIdMatch() {
+        return idMatch;
+    }
+
+    public void setIdMatch(int idMatch) {
+        this.idMatch = idMatch;
+    }
+
+    public int getIdArbitre() {
+        return idArbitre;
+    }
+
+    public void setIdArbitre(int idArbitre) {
+        this.idArbitre = idArbitre;
+    }
+
+    public byte getChaise() {
+        return chaise;
+    }
+
+    public void setChaise(byte chaise) {
+        this.chaise = chaise;
+    }
+    
+    
 }
