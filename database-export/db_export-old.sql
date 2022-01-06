@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 06 jan. 2022 à 20:51
+-- Généré le : jeu. 06 jan. 2022 à 20:49
 -- Version du serveur : 10.4.22-MariaDB
 -- Version de PHP : 8.0.13
 
@@ -108,8 +108,7 @@ CREATE TABLE `billet` (
   `Jour` date NOT NULL,
   `Terrain` int(11) NOT NULL,
   `Prix` int(11) NOT NULL,
-  `IdCategorie` int(11) NOT NULL,
-  `IdTypeTournois` int(11) NOT NULL
+  `IdCategorie` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -520,8 +519,7 @@ ALTER TABLE `arbitres`
 --
 ALTER TABLE `billet`
   ADD PRIMARY KEY (`IdBillet`),
-  ADD KEY `IdCategorie` (`IdCategorie`),
-  ADD KEY `IdTypeTournois` (`IdTypeTournois`);
+  ADD KEY `IdCategorie` (`IdCategorie`);
 
 --
 -- Index pour la table `categoriebillet`
@@ -685,8 +683,7 @@ ALTER TABLE `achat`
 -- Contraintes pour la table `billet`
 --
 ALTER TABLE `billet`
-  ADD CONSTRAINT `IdCategorie` FOREIGN KEY (`IdCategorie`) REFERENCES `categoriebillet` (`IdCategorie`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `IdTypeTournois` FOREIGN KEY (`IdTypeTournois`) REFERENCES `typetournois` (`IdTypeTournois`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `IdCategorie` FOREIGN KEY (`IdCategorie`) REFERENCES `categoriebillet` (`IdCategorie`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `equipes`
