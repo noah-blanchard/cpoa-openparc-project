@@ -86,7 +86,8 @@ public class StartingFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void adminConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminConnectActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
+        LoginAdmin.showFrame();
     }//GEN-LAST:event_adminConnectActionPerformed
 
     private void joueurConnect1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joueurConnect1ActionPerformed
@@ -96,7 +97,12 @@ public class StartingFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    
+    public static void main(String[] args) {
+        showFrame();
+    }
+    
+    public static void showFrame() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

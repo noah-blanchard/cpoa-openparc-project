@@ -5,66 +5,24 @@
  */
 package models;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author matan
  */
-public class Joueur {
+public class Joueur extends Personne {
 
-    private int idJoueur;
-    private String nom;
-    private String telephone;
-    private String email;
-    private String pays;
+    private static ArrayList<Joueur> instances = new ArrayList<Joueur>();
     private int classement;
+    private String groupe;
 
-    public Joueur(int idJoueur, String nom, String telephone, String email, String pays, int classement) {
-        this.idJoueur = idJoueur;
-        this.nom = nom;
-        this.telephone = telephone;
-        this.email = email;
-        this.pays = pays;
+    public Joueur(int idJoueur, String nom, String telephone, String email, String pays, int classement, String groupe) {
+   
+        super(idJoueur, nom, telephone, email, pays);
         this.classement = classement;
-    }
-
-    public int getIdJoueur() {
-        return idJoueur;
-    }
-
-    public void setIdJoueur(int idJoueur) {
-        this.idJoueur = idJoueur;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPays() {
-        return pays;
-    }
-
-    public void setPays(String pays) {
-        this.pays = pays;
+        this.groupe = groupe;
+        instances.add(this);
     }
 
     public int getClassement() {
@@ -74,5 +32,20 @@ public class Joueur {
     public void setClassement(int classement) {
         this.classement = classement;
     }
+
+    public static ArrayList<Joueur> getInstances() {
+        return instances;
+    }
+
+    public String getGroupe() {
+        return groupe;
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "classement=" + classement + '}';
+    }
+    
+    
     
 }

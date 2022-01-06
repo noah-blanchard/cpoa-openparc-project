@@ -5,7 +5,7 @@
  */
 package application;
 
-import database.Datasource;
+import database.MySqlDataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +29,7 @@ public class Main {
             //      Pour MariaDB
             //DataSource ds = MonMariaDbDataSource.getDataSource();
             //      Pour Oracle
-            DataSource ds = Datasource.getDataSource();
+            DataSource ds = MySqlDataSource.getDataSource();
             connection = ds.getConnection();
             // TODO code application logic here
             
