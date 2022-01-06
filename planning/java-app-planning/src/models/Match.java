@@ -5,12 +5,16 @@
  */
 package models;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author matan
  */
 public class Match {
 
+    private static ArrayList<Match> instances = new ArrayList<Match>();
+    
     private int idMatch;
     private int idPlanning;
     private String etape;
@@ -39,6 +43,8 @@ public class Match {
         this.idJoueur2 = idJoueur2_;
         this.idEquipe1 = idEquipe1_;
         this.idEquipe2 = idEquipe2_;
+        
+        instances.add(this);
     }
 
     public int getIdMatch() {
@@ -144,5 +150,12 @@ public class Match {
     public void setIdEquipe2(int idEquipe2) {
         this.idEquipe2 = idEquipe2;
     }
+
+    @Override
+    public String toString() {
+        return "Match{" + "idMatch=" + idMatch + ", idPlanning=" + idPlanning + ", etape=" + etape + ", idVainqueur=" + idVainqueur + ", idPerdant=" + idPerdant + ", score=" + score + ", estDouble=" + estDouble + ", idMatchPrec1=" + idMatchPrec1 + ", idMatchPrec2=" + idMatchPrec2 + ", idJoueur1=" + idJoueur1 + ", idJoueur2=" + idJoueur2 + ", idEquipe1=" + idEquipe1 + ", idEquipe2=" + idEquipe2 + '}';
+    }
+    
+    
 
 }

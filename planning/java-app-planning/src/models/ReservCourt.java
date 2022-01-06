@@ -5,11 +5,22 @@
  */
 package models;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author matan
  */
 public class ReservCourt {
+
+    public static ReservCourt findReserv(int idMatch) {
+        for(ReservCourt r : reservations){
+            if(r.getIdMatch() == idMatch){
+                return r;
+            }
+        }
+        return null;
+    }
 
     private int idReservation;
     private int idCourt;
@@ -19,6 +30,8 @@ public class ReservCourt {
     private int minute;
     private int jour;
 
+    private static ArrayList<ReservCourt> reservations = new ArrayList<ReservCourt>();
+    
     public ReservCourt(int idReservation_, int idCourt_, int idMatch_, int idJoueur_, int heure_, int minute_, int jour_) {
         this.idReservation = idReservation_;
         this.idCourt = idCourt_;
@@ -27,6 +40,8 @@ public class ReservCourt {
         this.heure = heure_;
         this.minute = minute_;
         this.jour = jour_;
+        
+        reservations.add(this);
     }
 
     public int getIdReservation() {
@@ -84,5 +99,12 @@ public class ReservCourt {
     public void setJour(int jour) {
         this.jour = jour;
     }
+
+    @Override
+    public String toString() {
+        return "ReservCourt{" + "idReservation=" + idReservation + ", idCourt=" + idCourt + ", idMatch=" + idMatch + ", idJoueur=" + idJoueur + ", heure=" + heure + ", minute=" + minute + ", jour=" + jour + '}';
+    }
+    
+    
     
 }

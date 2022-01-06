@@ -18,7 +18,6 @@ public class PlayerList extends javax.swing.JFrame {
      * Creates new form PlayerList
      */
     public static String col[] = {"Id", "Nom", "Telephone", "Email", "Pays", "Classement", "Groupe"};
-    
     public static DefaultTableModel tableModel = new DefaultTableModel(col, 0) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -86,6 +85,7 @@ public class PlayerList extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.dispose();
+        tableModel.setRowCount(0);
         AdminMenu.showFrame();
     }//GEN-LAST:event_jButton1ActionPerformed
 

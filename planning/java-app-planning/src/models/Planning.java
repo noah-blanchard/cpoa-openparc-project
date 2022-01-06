@@ -5,17 +5,22 @@
  */
 package models;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author matan
  */
 public class Planning {
+    
+    private static ArrayList<Planning> plannings = new ArrayList<Planning>();
 
     private int idPlanning;
     private int nombreMatchs;
     private int nombreJoueurs;
     private int nombreQualifiés;
     private String nomPlanning;
+    private ArrayList<Match> matchs = new ArrayList<Match>();
 
     public Planning(int idPlanning_, int nombreMatchs_, int nombreJoueurs_, int nombreQualifiés_, String nomPlanning_) {
         this.idPlanning = idPlanning_;
@@ -23,6 +28,7 @@ public class Planning {
         this.nombreJoueurs = nombreJoueurs_;
         this.nombreQualifiés = nombreQualifiés_;
         this.nomPlanning = nomPlanning_;
+        plannings.add(this);
     }
 
     public int getIdPlanning() {
@@ -64,6 +70,33 @@ public class Planning {
     public void setNomPlanning(String nomPlanning) {
         this.nomPlanning = nomPlanning;
     }
+
+    public static ArrayList<Planning> getPlannings() {
+        return plannings;
+    }
+
+    public static void setPlannings(ArrayList<Planning> plannings) {
+        Planning.plannings = plannings;
+    }
+
+    public ArrayList<Match> getMatchs() {
+        return matchs;
+    }
+
+    public void setMatchs(ArrayList<Match> matchs) {
+        this.matchs = matchs;
+    }
+
+    public void addMatch(Match m){
+        this.matchs.add(m);
+    }
     
+    @Override
+    public String toString() {
+        return "Planning{" + "idPlanning=" + idPlanning + ", nombreMatchs=" + nombreMatchs + ", nombreJoueurs=" + nombreJoueurs + ", nombreQualifi\u00e9s=" + nombreQualifiés + ", nomPlanning=" + nomPlanning + ", matchs=" + matchs + '}';
+    }
+    
+    
+        
     
 }

@@ -19,7 +19,7 @@ import models.Joueur;
  * @author matan
  */
 public class JoueurController {
-    public static void getJoueur(){
+    public static void getJoueurs(){
         try {
             ResultSet joueurs = DAOJoueur.getJoueurs();
             while(joueurs.next()){
@@ -32,7 +32,7 @@ public class JoueurController {
     
     public static void addTableRows(DefaultTableModel model){
         if(Joueur.getInstances().isEmpty())
-            JoueurController.getJoueur();
+            JoueurController.getJoueurs();
         
         ArrayList<Joueur> joueurs = Joueur.getInstances();
         for(Joueur j : joueurs){
