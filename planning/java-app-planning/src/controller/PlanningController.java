@@ -8,11 +8,13 @@ package controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import models.DAOJoueur;
+import models.DAOMatchs;
 import models.DAOPlanning;
 import models.Joueur;
 import models.Match;
@@ -30,7 +32,7 @@ public class PlanningController {
         try {
             ResultSet plannings = DAOPlanning.getPlannings();
             while (plannings.next()) {
-                Planning p = new Planning(plannings.getInt("idPlanning"), plannings.getInt("nombreMatchs"), plannings.getInt("nombreJoueurs"), plannings.getInt("nombreQualifiés"), plannings.getString("nomPlanning"));
+                Planning p = new Planning(plannings.getInt("id"), plannings.getInt(2), plannings.getInt(3), plannings.getInt(4), plannings.getString(5));
                 getMatchByPlanning(p);
                 System.out.println(p);
             }
@@ -44,10 +46,9 @@ public class PlanningController {
         try {
             ResultSet matchs = DAOPlanning.getMatchs(p);
             while (matchs.next()) {
-                Match m = new Match(matchs.getInt(1), matchs.getInt(2), matchs.getString(3),
-                        matchs.getInt(4), matchs.getInt(5), matchs.getString(6), matchs.getByte(7),
-                        matchs.getInt(8), matchs.getInt(9), matchs.getInt(10), matchs.getInt(11),
-                        matchs.getInt(12), matchs.getInt(13));
+                Match m = new Match(matchs.getInt(1), matchs.getInt(2), matchs.getString("etape"),
+                        matchs.getInt(3), matchs.getInt(4), matchs.getString("score"), matchs.getByte(7),
+                        matchs.getInt(8), matchs.getInt(9), matchs.getInt(10), matchs.getInt(11));
 
                 p.getMatchs().add(m);
             }
@@ -58,67 +59,62 @@ public class PlanningController {
     }
 
     public static Planning genererPlanningSimplePremierTour() {
-        if (Planning.getPlannings().isEmpty()) {
-            getAll();
-        }
         if (Joueur.getInstances().isEmpty()) {
             JoueurController.getJoueurs();
         }
-        if (Planning.getPlannings().get(0).getMatchs().isEmpty()) {
+        if (Planning.getPlannings().isEmpty()) {
+            getAll();
+        }
+        Planning p = Planning.getPlannings().get(0);
+        p.getNewMatchs().clear();
+        ArrayList<Joueur> j = Joueur.getjSimple();
+        Collections.shuffle(j);
 
-            Planning p = Planning.getPlannings().get(0);
-            ArrayList<Joueur> j = Joueur.getjSimple();
+        int n = 0;
+        int jour = 2;
+        int heure = 14;
+        int minute = 0;
+        int court = 1;
+        for (int i = 0; i < 16; ++i) {
 
-            int n = 0;
-            int jour = 2;
-            int heure = 14;
-            int minute = 0;
-            int court = 1;
-            for (int i = 0; i < 16; ++i) {
+            int matchId1 = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
+            int rId1 = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
+            int idJoueur = j.get(n++).getId();
+            int j2 = -1;
+            if (n < 24) {
+                j2 = j.get(n++).getId();
+            }
+            Match m = new Match(matchId1, 1, "Seizième", -1, -1, "", (byte) 0, idJoueur, (j2 > -1 ? j2 : -1), -1, -1);
+            ReservCourt reserv = new ReservCourt(rId1, court, matchId1, -1, heure, minute, jour);
 
-                int matchId1 = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
-                int rId1 = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
-                int idJoueur = j.get(n++).getId();
-                int j2 = -1;
-                if (n < 24) {
-                    j2 = j.get(n++).getId();
-                }
-                Match m = new Match(matchId1, 0, "Seizième", -1, -1, "", (byte) 0, -1, -1, idJoueur, (j2 > -1 ? j2 : -1), -1, -1);
-                ReservCourt reserv = new ReservCourt(rId1, court, matchId1, -1, heure, minute, jour);
-                System.out.println(reserv);
+            p.addNewMatch(m);
 
-                p.addMatch(m);
-
-                if (jour > 2 && heure > 14) {
-                    court++;
-                } else {
-                    int randPlus = ThreadLocalRandom.current().nextInt(1, 3 + 1);
-                    court += randPlus;
-                }
-
-                if (heure == 16) {
-                    jour++;
-                    heure = 10;
-                }
-                if (court > 4) {
-                    court = 1;
-                    heure += 2;
-                }
-
+            if (jour > 2 && heure > 12) {
+                court++;
+            } else {
+                int randPlus = ThreadLocalRandom.current().nextInt(1, 3 + 1);
+                court += randPlus;
             }
 
-            return p;
+            if (heure == 16) {
+                jour++;
+                heure = 10;
+            }
+            if (court > 4) {
+                court = 1;
+                heure += 2;
+            }
 
-        } else {
-            return Planning.getPlannings().get(0);
         }
+
+        return p;
 
     }
 
     public static void addTableRows(DefaultTableModel planningSimple) {
         planningSimple.setRowCount(0);
         Planning p = genererPlanningSimplePremierTour();
-        ArrayList<Match> matchs = p.getMatchs();
+        ArrayList<Match> matchs = p.getNewMatchs();
 
         for (Match m : matchs) {
             Joueur j1 = Joueur.findById(m.getIdJoueur1());
@@ -162,5 +158,24 @@ public class PlanningController {
             Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", date, m.getEtape()};
             planningSimple.addRow(row);
         }
+    }
+
+    public static int checkExistSimple() {
+        if (Planning.getPlannings().isEmpty()) {
+            getAll();
+        }
+
+        if (!(Planning.getPlannings().get(0).getMatchs().isEmpty())) {
+            return 1;
+        } else {
+            return 0;
+        }
+
+    }
+
+    public static void confirmPlanningSimple() {
+        Planning p = Planning.getPlannings().get(0);
+        DAOMatchs.clearMatchs(1);
+        DAOMatchs.putMatchList(p.getNewMatchs());
     }
 }

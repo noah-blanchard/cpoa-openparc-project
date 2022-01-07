@@ -19,10 +19,10 @@ public final class MySqlDataSource extends MysqlDataSource {
             ds = new MySqlDataSource();
             // on la définit avec les paramètres suivants : 
             ds.setPortNumber(3306);
-            ds.setServerName("sql11.freesqldatabase.com");
-            ds.setDatabaseName("sql11463312"); // à modifier
-            ds.setUser("sql11463312"); // à modifier
-            ds.setPassword("MkD4Gv7uGD"); // à modifier numéro BIP
+            ds.setServerName("34.159.220.180");
+            ds.setDatabaseName("bdd_cpoa_2022"); // à modifier
+            ds.setUser("root"); // à modifier
+            ds.setPassword("cpoabdd"); // à modifier numéro BIP
         } // sinon, un datasource existe déjà :
         return ds;
         /* retourne l’instance unique */

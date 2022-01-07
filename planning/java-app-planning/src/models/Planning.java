@@ -21,6 +21,7 @@ public class Planning {
     private int nombreQualifiés;
     private String nomPlanning;
     private ArrayList<Match> matchs = new ArrayList<Match>();
+    private ArrayList<Match> newMatchs = new ArrayList<Match>();
 
     public Planning(int idPlanning_, int nombreMatchs_, int nombreJoueurs_, int nombreQualifiés_, String nomPlanning_) {
         this.idPlanning = idPlanning_;
@@ -95,6 +96,16 @@ public class Planning {
     public String toString() {
         return "Planning{" + "idPlanning=" + idPlanning + ", nombreMatchs=" + nombreMatchs + ", nombreJoueurs=" + nombreJoueurs + ", nombreQualifi\u00e9s=" + nombreQualifiés + ", nomPlanning=" + nomPlanning + ", matchs=" + matchs + '}';
     }
+
+    public void addNewMatch(Match m) {
+        this.newMatchs.add(m);
+    }
+
+    public ArrayList<Match> getNewMatchs() {
+        return newMatchs;
+    }
+    
+    
     
     
         

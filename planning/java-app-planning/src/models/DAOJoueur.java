@@ -30,7 +30,7 @@ public class DAOJoueur {
             ds = MySqlDataSource.getDataSource();
             c = ds.getConnection();
             
-            String sql = "SELECT * FROM joueurs ORDER BY groupe";
+            String sql = "SELECT * FROM joueur ORDER BY groupe";
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
                         

@@ -23,7 +23,7 @@ public class JoueurController {
         try {
             ResultSet joueurs = DAOJoueur.getJoueurs();
             while(joueurs.next()){
-                Joueur j = new Joueur(joueurs.getInt("idJoueur"), joueurs.getString("nom"), joueurs.getString("telephone"), joueurs.getString("email"), joueurs.getString("pays"), joueurs.getInt("classement"), joueurs.getString("groupe"));
+                Joueur j = new Joueur(joueurs.getInt("id"), joueurs.getString("nom"), joueurs.getString("telephone"), joueurs.getString("email"), joueurs.getString("pays"), joueurs.getInt("classement"), joueurs.getString("groupe"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(JoueurController.class.getName()).log(Level.SEVERE, null, ex);

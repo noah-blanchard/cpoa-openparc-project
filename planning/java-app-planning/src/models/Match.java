@@ -29,7 +29,7 @@ public class Match {
     private int idEquipe1;
     private int idEquipe2;
 
-    public Match(int idMatch_, int idPlanning_, String etape_, int idVainqueur_, int idPerdant_, String score_, byte estDouble_, int idMatchPrec1_, int idMatchPrec2_, int idJoueur1_, int idJoueur2_, int idEquipe1_, int idEquipe2_) {
+    public Match(int idMatch_, int idPlanning_, String etape_, int idVainqueur_, int idPerdant_, String score_, byte estDouble_, int idJoueur1_, int idJoueur2_, int idEquipe1_, int idEquipe2_) {
         this.idMatch = idMatch_;
         this.idPlanning = idPlanning_;
         this.etape = etape_;
@@ -37,8 +37,6 @@ public class Match {
         this.idPerdant = idPerdant_;
         this.score = score_;
         this.estDouble = estDouble_;
-        this.idMatchPrec1 = idMatchPrec1_;
-        this.idMatchPrec2 = idMatchPrec2_;
         this.idJoueur1 = idJoueur1_;
         this.idJoueur2 = idJoueur2_;
         this.idEquipe1 = idEquipe1_;
