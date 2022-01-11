@@ -1,1 +1,0 @@
-rsync -av ./ bx1h1_nblanchard@bx1h1.ftp.infomaniak.com:~/openparc --include=public/.htaccess --exclude-from=.gitignore --exclude=".*"
