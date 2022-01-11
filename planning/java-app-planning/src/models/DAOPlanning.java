@@ -52,7 +52,7 @@ public class DAOPlanning {
             ds = MySqlDataSource.getDataSource();
             c = ds.getConnection();
 
-            String sql = "SELECT * FROM matchs WHERE id_planning_id = ?";
+            String sql = "SELECT * FROM rencontre WHERE id_planning_id = ?";
             ps = c.prepareStatement(sql);
             ps.setInt(1, p.getIdPlanning());
             rs = ps.executeQuery();

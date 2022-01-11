@@ -47,8 +47,8 @@ public class PlanningController {
             ResultSet matchs = DAOPlanning.getMatchs(p);
             while (matchs.next()) {
                 Match m = new Match(matchs.getInt(1), matchs.getInt(2), matchs.getString("etape"),
-                        matchs.getInt(3), matchs.getInt(4), matchs.getString("score"), matchs.getByte(7),
-                        matchs.getInt(8), matchs.getInt(9), matchs.getInt(10), matchs.getInt(11));
+                        matchs.getInt("id_vainqueur"), matchs.getInt("id_perdant"), matchs.getString("score"), matchs.getByte("est_double"),
+                        matchs.getInt("id_joueur1"), matchs.getInt("id_joueur2"), matchs.getInt("id_equipe1"), matchs.getInt("id_equipe2"));
 
                 p.getMatchs().add(m);
             }

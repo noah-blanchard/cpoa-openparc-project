@@ -20,7 +20,7 @@ public final class MySqlDataSource extends MysqlDataSource {
             // on la définit avec les paramètres suivants : 
             ds.setPortNumber(3306);
             ds.setServerName("34.159.220.180");
-            ds.setDatabaseName("bdd_cpoa_2022"); // à modifier
+            ds.setDatabaseName("cpoa_2022"); // à modifier
             ds.setUser("root"); // à modifier
             ds.setPassword("cpoabdd"); // à modifier numéro BIP
         } // sinon, un datasource existe déjà :

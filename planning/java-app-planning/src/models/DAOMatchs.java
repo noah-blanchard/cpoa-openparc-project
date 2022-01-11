@@ -27,11 +27,11 @@ public class DAOMatchs {
     public static void putMatchList(ArrayList<Match> matchs) {
         PreparedStatement ps = null;
 
-        String sql = "INSERT INTO `bdd_cpoa_2022`.`matchs`"
+        String sql = "INSERT INTO `cpoa_2022`.`rencontre`"
                 + "(`id`,"
                 + "`id_planning_id`,"
-                + "`id_vainqueur_id`,"
-                + "`id_perdant_id`,"
+                + "`id_vainqueur`,"
+                + "`id_perdant`,"
                 + "`id_joueur1`,"
                 + "`id_joueur2`,"
                 + "`id_equipe1`,"
@@ -87,7 +87,7 @@ public class DAOMatchs {
             ds = MySqlDataSource.getDataSource();
             c = ds.getConnection();
 
-            ps = c.prepareStatement("DELETE FROM matchs WHERE id_planning_id = ?");
+            ps = c.prepareStatement("DELETE FROM rencontre WHERE id_planning_id = ?");
             ps.setInt(1, planning);
             ps.executeUpdate();
         } catch (SQLException ex) {
