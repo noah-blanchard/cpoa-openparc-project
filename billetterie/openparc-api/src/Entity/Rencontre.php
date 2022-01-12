@@ -86,9 +86,17 @@ class Rencontre
      */
     private $arbitreChaise;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="idMatch")
+     */
+    private $reservations;
+
+  
+
     public function __construct()
     {
         $this->arbitres = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -260,6 +268,36 @@ class Rencontre
     public function setArbitreChaise(?Arbitre $arbitreChaise): self
     {
         $this->arbitreChaise = $arbitreChaise;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reservation[]
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setIdMatch($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getIdMatch() === $this) {
+                $reservation->setIdMatch(null);
+            }
+        }
 
         return $this;
     }

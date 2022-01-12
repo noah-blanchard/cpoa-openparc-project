@@ -3,14 +3,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\ReservCourtRepository;
+use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=ReservCourtRepository::class)
+ * @ORM\Entity(repositoryClass=ReservationRepository::class)
  */
-class ReservCourt
+class Reservation
 {
     /**
      * @ORM\Id
@@ -20,17 +20,17 @@ class ReservCourt
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Court::class)
+     * @ORM\ManyToOne(targetEntity=Court::class, inversedBy="reservations")
      */
     private $idCourt;
 
     /**
-     * @ORM\OneToOne(targetEntity=Rencontre::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Rencontre::class, inversedBy="reservations")
      */
     private $idMatch;
 
     /**
-     * @ORM\OneToOne(targetEntity=Joueur::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Joueur::class, inversedBy="reservations")
      */
     private $idJoueur;
 

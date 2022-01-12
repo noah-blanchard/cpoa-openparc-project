@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import models.DAOJoueur;
 import models.DAOMatchs;
 import models.DAOPlanning;
+import models.DAOReservCourt;
 import models.Joueur;
 import models.Match;
 import models.Planning;
@@ -154,7 +155,8 @@ public class PlanningController {
                     date = "21/05";
                     break;
             }
-
+            
+            
             Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", date, m.getEtape()};
             planningSimple.addRow(row);
         }
@@ -177,5 +179,9 @@ public class PlanningController {
         Planning p = Planning.getPlannings().get(0);
         DAOMatchs.clearMatchs(1);
         DAOMatchs.putMatchList(p.getNewMatchs());
+        for(Match m : p.getNewMatchs()){
+            ReservCourt r = ReservCourt.findReserv(m.getIdMatch());
+            DAOReservCourt.addReservation(r);
+        }
     }
 }
