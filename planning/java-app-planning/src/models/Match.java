@@ -28,8 +28,11 @@ public class Match {
     private int idJoueur2;
     private int idEquipe1;
     private int idEquipe2;
-
-    public Match(int idMatch_, int idPlanning_, String etape_, int idVainqueur_, int idPerdant_, String score_, byte estDouble_, int idJoueur1_, int idJoueur2_, int idEquipe1_, int idEquipe2_) {
+    private int idEquipeRamasseurs;
+    private int idEquipeRamasseurs2;
+    private int idReservation;
+            
+    public Match(int idMatch_, int idPlanning_, String etape_, int idVainqueur_, int idPerdant_, String score_, byte estDouble_, int idJoueur1_, int idJoueur2_, int idEquipe1_, int idEquipe2_, int idEquipeRamasseurs, int idEquipeRamasseurs2, int idReservation) {
         this.idMatch = idMatch_;
         this.idPlanning = idPlanning_;
         this.etape = etape_;
@@ -41,6 +44,10 @@ public class Match {
         this.idJoueur2 = idJoueur2_;
         this.idEquipe1 = idEquipe1_;
         this.idEquipe2 = idEquipe2_;
+        this.idEquipeRamasseurs = idEquipeRamasseurs;
+        this.idEquipeRamasseurs2 = idEquipeRamasseurs2;
+        this.idReservation = idReservation;
+        
         
         instances.add(this);
     }
@@ -121,6 +128,16 @@ public class Match {
         return idJoueur1;
     }
 
+    public int getIdReservation() {
+        return idReservation;
+    }
+
+    public void setIdReservation(int idReservation) {
+        this.idReservation = idReservation;
+    }
+    
+    
+
     public void setIdJoueur1(int idJoueur1) {
         this.idJoueur1 = idJoueur1;
     }
@@ -147,6 +164,43 @@ public class Match {
 
     public void setIdEquipe2(int idEquipe2) {
         this.idEquipe2 = idEquipe2;
+    }
+
+    public static ArrayList<Match> getInstances() {
+        return instances;
+    }
+
+    public static void setInstances(ArrayList<Match> instances) {
+        Match.instances = instances;
+    }
+
+    public int getIdEquipeRamasseurs() {
+        return idEquipeRamasseurs;
+    }
+
+    public void setIdEquipeRamasseurs(int idEquipeRamasseurs) {
+        this.idEquipeRamasseurs = idEquipeRamasseurs;
+    }
+
+    public int getIdEquipeRamasseurs2() {
+        return idEquipeRamasseurs2;
+    }
+
+    public void setIdEquipeRamasseurs2(int idEquipeRamasseurs2) {
+        this.idEquipeRamasseurs2 = idEquipeRamasseurs2;
+    }
+    
+    
+    
+    public static ArrayList<Match> getMatchByPlanning(int planning){
+        ArrayList<Match> matchList = new ArrayList<Match>();
+            
+        for(Match m : instances){
+            if(m.getIdPlanning() == planning)
+                matchList.add(m);
+        }
+        
+        return matchList;
     }
 
     @Override

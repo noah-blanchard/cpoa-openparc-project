@@ -26,6 +26,8 @@ public class DAOMatchs {
 
     public static void putMatchList(ArrayList<Match> matchs) {
         PreparedStatement ps = null;
+        
+        
 
         String sql = "INSERT INTO `cpoa_2022`.`rencontre`"
                 + "(`id`,"
@@ -38,11 +40,12 @@ public class DAOMatchs {
                 + "`id_equipe2`,"
                 + "`etape`,"
                 + "`score`,"
-                + "`est_double`)"
+                + "`est_double`, `id_equipe_ramasseurs`, `id_equipe_ramasseurs2`, `reservations`)"
                 + "VALUES"
-                +"(?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
+                +"(?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ?, ?, ?, ?)";
 
         for (Match m : matchs) {
+            System.out.println(m);
             /*sql = sql + "( " + m.getIdMatch() + ","
                     + m.getIdPlanning() + ","
                     + m.getIdVainqueur()+ ","
@@ -73,6 +76,10 @@ public class DAOMatchs {
                 ps.setString(9, m.getEtape());
                 ps.setString(10, m.getScore());
                 ps.setInt(11, m.getEstDouble());
+                ps.setInt(12, m.getIdEquipeRamasseurs());
+                ps.setInt(13, m.getIdEquipeRamasseurs2());
+                ps.setInt(14, m.getIdReservation());
+                
 
                 ps.executeUpdate();
             } catch (SQLException ex) {
@@ -87,6 +94,7 @@ public class DAOMatchs {
             ds = MySqlDataSource.getDataSource();
             c = ds.getConnection();
 
+            
             ps = c.prepareStatement("DELETE FROM rencontre WHERE id_planning_id = ?");
             ps.setInt(1, planning);
             ps.executeUpdate();

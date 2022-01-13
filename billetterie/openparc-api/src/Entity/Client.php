@@ -5,9 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  */
 class Client
@@ -16,31 +22,37 @@ class Client
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"write"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"write"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"write"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"write"})
      */
     private $licence;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"write"})
      */
     private $age;
 

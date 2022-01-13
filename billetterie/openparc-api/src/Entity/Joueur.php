@@ -7,9 +7,15 @@ use App\Repository\JoueurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass=JoueurRepository::class)
  */
 class Joueur
@@ -18,43 +24,51 @@ class Joueur
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $pays;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $classement;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $groupe;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="idJoueur")
-     */
-    private $reservations;
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="idJoueur")
+    //  * @Groups({"read"})
+    //  */
+    // private $reservations;
 
  
 
@@ -140,34 +154,34 @@ class Joueur
         return $this;
     }
 
-    /**
-     * @return Collection|Reservation[]
-     */
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
+    // /**
+    //  * @return Collection|Reservation[]
+    //  */
+    // public function getReservations(): Collection
+    // {
+    //     return $this->reservations;
+    // }
 
-    public function addReservation(Reservation $reservation): self
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setIdJoueur($this);
-        }
+    // public function addReservation(Reservation $reservation): self
+    // {
+    //     if (!$this->reservations->contains($reservation)) {
+    //         $this->reservations[] = $reservation;
+    //         $reservation->setIdJoueur($this->id);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeReservation(Reservation $reservation): self
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getIdJoueur() === $this) {
-                $reservation->setIdJoueur(null);
-            }
-        }
+    // public function removeReservation(Reservation $reservation): self
+    // {
+    //     if ($this->reservations->removeElement($reservation)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($reservation->getIdJoueur() === $this->id) {
+    //             $reservation->setIdJoueur(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
 }

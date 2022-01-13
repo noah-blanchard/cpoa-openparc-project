@@ -16,7 +16,7 @@ const TicketCard = ({day, title, reservable}) => {
             <img src={Image} />
             <p>Jour {day}</p>
             <p>{title}</p>
-            <Button variant="contained" disabled={!reservable && "true"} onClick={() => nav("reserver/" + day)}>Réserver</Button>
+            <Button variant="contained" disabled={!reservable && true} onClick={() => nav("reserver/" + day)}>Réserver</Button>
         </div>
     )
 }

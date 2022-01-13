@@ -49,7 +49,7 @@ public class PlanningController {
             while (matchs.next()) {
                 Match m = new Match(matchs.getInt(1), matchs.getInt(2), matchs.getString("etape"),
                         matchs.getInt("id_vainqueur"), matchs.getInt("id_perdant"), matchs.getString("score"), matchs.getByte("est_double"),
-                        matchs.getInt("id_joueur1"), matchs.getInt("id_joueur2"), matchs.getInt("id_equipe1"), matchs.getInt("id_equipe2"));
+                        matchs.getInt("id_joueur1"), matchs.getInt("id_joueur2"), matchs.getInt("id_equipe1"), matchs.getInt("id_equipe2"), matchs.getInt("id_equipe_ramasseurs"), matchs.getInt("id_equipe_ramasseurs2"), matchs.getInt("reservations"));
 
                 p.getMatchs().add(m);
             }
@@ -85,7 +85,7 @@ public class PlanningController {
             if (n < 24) {
                 j2 = j.get(n++).getId();
             }
-            Match m = new Match(matchId1, 1, "Seizième", -1, -1, "", (byte) 0, idJoueur, (j2 > -1 ? j2 : -1), -1, -1);
+            Match m = new Match(matchId1, 1, "Seizième", -1, -1, "", (byte) 0, idJoueur, (j2 > -1 ? j2 : -1), -1, -1, -1, -1, rId1);
             ReservCourt reserv = new ReservCourt(rId1, court, matchId1, -1, heure, minute, jour);
 
             p.addNewMatch(m);
@@ -177,6 +177,7 @@ public class PlanningController {
 
     public static void confirmPlanningSimple() {
         Planning p = Planning.getPlannings().get(0);
+        DAOReservCourt.clearReservation(1);
         DAOMatchs.clearMatchs(1);
         DAOMatchs.putMatchList(p.getNewMatchs());
         for(Match m : p.getNewMatchs()){

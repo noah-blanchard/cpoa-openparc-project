@@ -7,9 +7,15 @@ use App\Repository\CourtRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass=CourtRepository::class)
  */
 class Court
@@ -18,16 +24,19 @@ class Court
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read"})
      */
     private $principal;
 
     /**
      * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="idCourt")
+     * @Groups({"read"})
      */
     private $reservations;
 

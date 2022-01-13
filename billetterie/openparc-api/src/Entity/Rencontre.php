@@ -7,9 +7,16 @@ use App\Repository\RencontreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
+ * 
  * @ORM\Entity(repositoryClass=RencontreRepository::class)
  */
 class Rencontre
@@ -18,85 +25,103 @@ class Rencontre
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Planning::class, inversedBy="matchs")
+     * @Groups({"read"})
      */
     private $idPlanning;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $etape;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idVainqueur;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idPerdant;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"read"})
      */
     private $score;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"read"})
      */
     private $estDouble;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idJoueur1;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idJoueur2;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idEquipe1;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idEquipe2;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idEquipeRamasseurs;
 
     /**
      * @ORM\ManyToMany(targetEntity=Arbitre::class, inversedBy="rencontresArbitrees")
+     * @Groups({"read"})
      */
     private $arbitres;
 
     /**
      * @ORM\ManyToOne(targetEntity=Arbitre::class)
+     * @Groups({"read"})
      */
     private $arbitreChaise;
 
     /**
-     * @ORM\OneToMany(targetEntity=Reservation::class, mappedBy="idMatch")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $reservations;
 
-  
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $idEquipeRamasseurs2;
 
     public function __construct()
     {
         $this->arbitres = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
+        $this->billets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -272,32 +297,56 @@ class Rencontre
         return $this;
     }
 
-    /**
-     * @return Collection|Reservation[]
-     */
-    public function getReservations(): Collection
+    public function getReservations(): ?int
     {
         return $this->reservations;
     }
 
-    public function addReservation(Reservation $reservation): self
+    public function setReservation(?int $reservations): self
     {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setIdMatch($this);
+        $this->reservations = $reservations;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Billet[]
+     */
+    public function getBillets(): Collection
+    {
+        return $this->billets;
+    }
+
+    public function addBillet(Billet $billet): self
+    {
+        if (!$this->billets->contains($billet)) {
+            $this->billets[] = $billet;
+            $billet->setRencontre($this);
         }
 
         return $this;
     }
 
-    public function removeReservation(Reservation $reservation): self
+    public function removeBillet(Billet $billet): self
     {
-        if ($this->reservations->removeElement($reservation)) {
+        if ($this->billets->removeElement($billet)) {
             // set the owning side to null (unless already changed)
-            if ($reservation->getIdMatch() === $this) {
-                $reservation->setIdMatch(null);
+            if ($billet->getRencontre() === $this) {
+                $billet->setRencontre(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIdEquipeRamasseurs2(): ?int
+    {
+        return $this->idEquipeRamasseurs2;
+    }
+
+    public function setIdEquipeRamasseurs2(int $idEquipeRamasseurs2): self
+    {
+        $this->idEquipeRamasseurs2 = $idEquipeRamasseurs2;
 
         return $this;
     }

@@ -5,9 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\EquipeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass=EquipeRepository::class)
  */
 class Equipe
@@ -16,16 +22,19 @@ class Equipe
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\OneToOne(targetEntity=Joueur::class, cascade={"persist", "remove"})
+     * @Groups({"read"})
      */
     private $idJoueur1;
 
     /**
      * @ORM\OneToOne(targetEntity=Joueur::class, cascade={"persist", "remove"})
+     * @Groups({"read"})
      */
     private $idJoueur2;
 

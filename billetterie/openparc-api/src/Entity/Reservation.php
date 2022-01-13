@@ -5,9 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass=ReservationRepository::class)
  */
 class Reservation
@@ -16,36 +22,43 @@ class Reservation
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Court::class, inversedBy="reservations")
+     * @Groups({"read"})
      */
     private $idCourt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Rencontre::class, inversedBy="reservations")
+     * @Groups({"read"})
      */
     private $idMatch;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Joueur::class, inversedBy="reservations")
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $idJoueur;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $heure;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $minute;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read"})
      */
     private $jour;
 
@@ -78,12 +91,12 @@ class Reservation
         return $this;
     }
 
-    public function getIdJoueur(): ?Joueur
+    public function getIdJoueur(): ?int
     {
         return $this->idJoueur;
     }
 
-    public function setIdJoueur(?Joueur $idJoueur): self
+    public function setIdJoueur(?int $idJoueur): self
     {
         $this->idJoueur = $idJoueur;
 

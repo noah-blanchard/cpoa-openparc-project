@@ -7,9 +7,15 @@ use App\Repository\PlanningRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     forceEager=false,
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass=PlanningRepository::class)
  */
 class Planning
@@ -18,31 +24,37 @@ class Planning
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $nombreMatchs;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $nombreJoueurs;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $nombreQualifies;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read"})
      */
     private $nomPlanning;
 
     /**
      * @ORM\OneToMany(targetEntity=Rencontre::class, mappedBy="idPlanning")
+     * @Groups({"read"})
      */
     private $matchs;
 

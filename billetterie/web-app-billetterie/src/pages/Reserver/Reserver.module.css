@@ -13,4 +13,14 @@
 .form{
     display:flex;
     flex-direction: column;
+    justify-content: space-between;
+    height:50%;
+
+}
+
+.form > div{
+    display:flex;
+    flex-direction: column;
+
+    gap:20px;
 }
