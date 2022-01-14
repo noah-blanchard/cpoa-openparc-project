@@ -115,13 +115,20 @@ class Rencontre
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $idEquipeRamasseurs2;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ReservPlace::class, mappedBy="rencontre")
+     * @Groups({"read"})
+     */
+    private $placesReservees;
 
     public function __construct()
     {
         $this->arbitres = new ArrayCollection();
-        $this->billets = new ArrayCollection();
+        $this->placesReservees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -309,36 +316,6 @@ class Rencontre
         return $this;
     }
 
-    /**
-     * @return Collection|Billet[]
-     */
-    public function getBillets(): Collection
-    {
-        return $this->billets;
-    }
-
-    public function addBillet(Billet $billet): self
-    {
-        if (!$this->billets->contains($billet)) {
-            $this->billets[] = $billet;
-            $billet->setRencontre($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBillet(Billet $billet): self
-    {
-        if ($this->billets->removeElement($billet)) {
-            // set the owning side to null (unless already changed)
-            if ($billet->getRencontre() === $this) {
-                $billet->setRencontre(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getIdEquipeRamasseurs2(): ?int
     {
         return $this->idEquipeRamasseurs2;
@@ -347,6 +324,36 @@ class Rencontre
     public function setIdEquipeRamasseurs2(int $idEquipeRamasseurs2): self
     {
         $this->idEquipeRamasseurs2 = $idEquipeRamasseurs2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReservPlace[]
+     */
+    public function getPlacesReservees(): Collection
+    {
+        return $this->placesReservees;
+    }
+
+    public function addPlacesReservee(ReservPlace $placesReservee): self
+    {
+        if (!$this->placesReservees->contains($placesReservee)) {
+            $this->placesReservees[] = $placesReservee;
+            $placesReservee->setRencontre($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlacesReservee(ReservPlace $placesReservee): self
+    {
+        if ($this->placesReservees->removeElement($placesReservee)) {
+            // set the owning side to null (unless already changed)
+            if ($placesReservee->getRencontre() === $this) {
+                $placesReservee->setRencontre(null);
+            }
+        }
 
         return $this;
     }

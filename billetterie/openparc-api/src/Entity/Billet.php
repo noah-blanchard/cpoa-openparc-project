@@ -28,18 +28,19 @@ class Billet
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"write"})
+     * @Groups({"write", "read"})
      */
     private $jour;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"write"})
+     * @Groups({"write", "read"})
      */
     private $prix;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Rencontre::class, inversedBy="billets")
+     * @ORM\ManyToOne(targetEntity=Rencontre::class)
+     * @Groups({"write", "read"})
      */
     private $rencontre;
 

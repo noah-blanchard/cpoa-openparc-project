@@ -24,3 +24,13 @@
 
     gap:20px;
 }
+
+.inlineDiv{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inlineDiv > button{
+    width:45%;
+}

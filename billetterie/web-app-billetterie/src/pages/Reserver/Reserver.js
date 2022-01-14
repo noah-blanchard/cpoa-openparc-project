@@ -9,6 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -17,14 +18,31 @@ const Reserver = () => {
 
     const [matchs, setMatchs] = useState([]);
     const [joueurs, setJoueurs] = useState([]);
-    const [selected, setSelected] = useState('');
+    const [lesPlaces, setLesPlaces] = useState([]);
+
+    const [selected, setSelected] = useState(-1);
     const [place, setPlace] = useState('');
 
+    const [chargement, setChargement] = useState(true);
+
+    const [tribune, setTribune] = useState('');
+
+    const [nom, setNom] = useState('');
+    const [prenom, setPrenom] = useState('');
+    const [email, setEmail] = useState('');
+    const [pass, setPass] = useState('');
+
     const { id } = useParams();
+
+    const tribunes = ["Ouest", "Est", "Nord", "Sud"];
 
     const handleChange = (event) => {
         setSelected(event.target.value);
     };
+
+    const handleChangePlace = (event) => {
+        setPlace(event.target.value);
+    }
 
 
     const getJoueurById = async (idJ, idJ2, idR) => {
@@ -73,7 +91,7 @@ const Reserver = () => {
                 for (let match of lesMatchs) {
                     let joueur1 = await axios.get("http://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur1);
                     let joueur2 = await axios.get("http://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur2);
-                    console.log(match.idMatch.id);
+
                     tab.push({
                         idR: match.idMatch.id,
                         nom1: joueur1.data.nom,
@@ -84,10 +102,12 @@ const Reserver = () => {
 
                 }
 
-                console.log(tab);
+
                 setJoueurs(tab);
             }
+            console.log(lesMatchs);
             setMatchs(lesMatchs);
+            setChargement(false);
 
 
 
@@ -95,6 +115,39 @@ const Reserver = () => {
         }
 
 
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (nom && prenom && email && pass) {
+            newBillet();
+        }
+    }
+
+    const newBillet = async () => {
+        try {
+
+            console.log(await axios.post("http://cpoa.noahblanchard.fr/api/billets", {
+                jour: parseInt(id),
+                prix: 25,
+                rencontre: "api/rencontres/" + selected
+            }))
+
+            console.log("api/rencontres/" + selected);
+
+            await axios.post("http://cpoa.noahblanchard.fr/api/clients", {
+                nom: nom,
+                telephone: prenom,
+                email: email,
+                licence: 1234,
+                age: 18
+            })
+
+
+            console.log("C'est bon 1")
+        } catch (ex) {
+            console.log(ex)
+        }
     }
 
     useEffect(() => {
@@ -107,14 +160,14 @@ const Reserver = () => {
 
     return (
         <div className={styles.reservPage + " page"}>
-            <form className={styles.form}>
+            <form onSubmit={handleSubmit} className={styles.form}>
 
                 <Box sx={{ minWidth: 120 }}>
                     {matchs ?
                         <>
                             <h3>Choisir un match et une place du court central</h3>
                             <FormControl fullWidth>
-                                
+
                                 <InputLabel id="demo-simple-select-label">Match</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -123,36 +176,59 @@ const Reserver = () => {
                                     label="Match"
                                     onChange={handleChange}
                                 >
+                                    <MenuItem key={-1} value={-1}>Ne pas réserver de place</MenuItem>
                                     {
-                                        matchs.map((m) => {
+                                        !chargement ?
+                                            matchs.map((m) => {
 
 
-                                            let j = joueurs.find(je => {
-                                                return je.idR == m.idMatch.id;
+                                                let j = joueurs.find(je => {
+                                                    return je.idR == m.idMatch.id;
+                                                })
+
+
+
+
+
+                                                return <MenuItem key={m.idMatch.id} value={m.idMatch.id}>{m.idMatch.id} - {j.nom1} contre {j.nom2 != "-1" ? j.nom2 : "Non Déterminé"} - {m.heure}:{m.minute}0</MenuItem>
+
                                             })
-                                            console.log(j.idR);
-
-
-
-
-
-                                            return <MenuItem key={m.idMatch.id} value={m.idMatch.id}>{m.idMatch.id} - {j.nom1} contre {j.nom2 != "-1" ? j.nom2 : "Non Déterminé"} - {m.heure}:{m.minute}0</MenuItem>
-                                        })
+                                            :
+                                            <MenuItem key={0} value={0}>Chargement...</MenuItem>
                                     }
                                 </Select>
                             </FormControl>
                             <FormControl fullWidth>
-                                
+
+                                <InputLabel id="demo-simple-select-label">Tribune</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={tribune}
+                                    label="Tribune"
+                                    onChange={(e) => setTribune(e.target.value)}
+                                    disabled={selected != "" && selected != -1 ? false : true}
+                                >
+                                    <MenuItem value={"Ouest"}>Tribune Ouest</MenuItem>
+                                    <MenuItem value={"Ouest"}>Tribune Nord</MenuItem>
+                                    <MenuItem value={"Ouest"}>Tribune Sud</MenuItem>
+                                    <MenuItem value={"Ouest"}>Tribune Est</MenuItem>
+                                </Select>
+
+
+                            </FormControl>
+                            <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">Place</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={place}
                                     label="Place"
-                                    onChange={handleChange}
-                                    disabled={selected != "" ? false : true}
+                                    onChange={handleChangePlace}
+                                    disabled={selected != "" && selected != -1 ? false : true}
                                 >
-                                    <MenuItem value={1}>Place 1</MenuItem>
+                                    
+
                                 </Select>
                             </FormControl>
                             <h3>Entrez vos infos personnelles</h3>
@@ -161,30 +237,53 @@ const Reserver = () => {
                                 id="outlined-required"
                                 label="Nom"
                                 defaultValue=""
-                                disabled={selected == '' ? true : false}
+                                error={selected == '' || selected == -1 ? true : false}
+                                disabled={selected == '' || selected == -1 ? true : false}
+                                value={nom}
+                                onChange={(e) => setNom(e.target.value)}
                             />
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Prenom"
                                 defaultValue=""
-                                disabled={selected == '' ? true : false}
+                                value={prenom}
+                                onChange={(e) => setPrenom(e.target.value)}
+                                error={selected == '' || selected == -1 ? true : false}
+
+                                disabled={selected == '' || selected == -1 ? true : false}
                             />
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Email"
+                                type="email"
                                 defaultValue=""
-                                disabled={selected == '' ? true : false}
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                error={selected == '' || selected == -1 ? true : false}
+
+                                disabled={selected == '' || selected == -1 ? true : false}
                             />
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Code secret"
+                                type="password"
                                 defaultValue=""
-                                disabled={selected == '' ? true : false}
+                                value={pass}
+                                onChange={(e) => setPass(e.target.value)}
+                                error={selected == '' || selected == -1 ? true : false}
+
+                                disabled={selected == '' || selected == -1 ? true : false}
+                                helperText="Pour retrouver votre réservation"
                             /></>
                         : <h1>Chargement</h1>}
+
+                    <div className={styles.inlineDiv}>
+                        <Button variant="outlined">Précédent</Button>
+                        <Button variant="contained" type="submit">Suivant</Button>
+                    </div>
 
                 </Box>
             </form>
