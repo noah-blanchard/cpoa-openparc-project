@@ -4,28 +4,38 @@ import styles from './Reserver.module.css'
 import axios from 'axios'
 
 import Box from '@mui/material/Box';
+import Link from "@mui/material/Link"
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Reserver = () => {
+
+
+    const [open, setOpen] = useState(false);
+    const [age, setAge] = useState(0);
+
+    const navigate = useNavigate();
 
     const [matchs, setMatchs] = useState([]);
     const [joueurs, setJoueurs] = useState([]);
     const [lesPlaces, setLesPlaces] = useState([]);
+    const [placesDispo, setPlacesDispo] = useState([]);
 
     const [selected, setSelected] = useState(-1);
-    const [place, setPlace] = useState('');
+    const [place, setPlace] = useState(-1);
 
     const [chargement, setChargement] = useState(true);
 
-    const [tribune, setTribune] = useState('');
+    const [tribune, setTribune] = useState(-1);
 
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] = useState('');
@@ -38,10 +48,56 @@ const Reserver = () => {
 
     const handleChange = (event) => {
         setSelected(event.target.value);
+
+
+
+        if (event.target.value > 0) {
+
+            const selectedMatch = matchs.filter(m => {
+                return m.idMatch.id == event.target.value;
+            })[0].idMatch;
+            console.log(selectedMatch);
+            filterPlace(selectedMatch.placesReservees);
+        } else {
+            setTribune(-1); setPlace(-1);
+        }
+
     };
+
+    const filterPlace = (placesReservees) => {
+        let tabPlacesReservees = placesReservees.map(p => {
+            return p.place.id;
+        })
+
+        let placeD = lesPlaces;
+
+        for (let idReservee of tabPlacesReservees) {
+
+            placeD = placeD.filter(place => {
+                return place.id != idReservee;
+            })
+        }
+
+        setPlacesDispo(placeD);
+
+
+    }
 
     const handleChangePlace = (event) => {
         setPlace(event.target.value);
+    }
+
+    const mapPlace = () => {
+        const tabPlace = placesDispo.filter(p => {
+            return p.tribune == tribune;
+        })
+
+        console.log(tabPlace);
+
+        return tabPlace.map(p => {
+            return <MenuItem key={p.id} value={p.id}>Place {p.id} - Cat {p.cat}</MenuItem>
+        })
+        //<MenuItem key={m.idMatch.id} value={m.idMatch.id}>{m.idMatch.id} - {j.nom1} contre {j.nom2 != "-1" ? j.nom2 : "Non Déterminé"} - {m.heure}:{m.minute}0</MenuItem>
     }
 
 
@@ -63,24 +119,16 @@ const Reserver = () => {
     const getMatchsPrincipal = async () => {
         try {
             let response = await axios.get("http://cpoa.noahblanchard.fr/api/courts/1");
+            let places = await axios.get("http://cpoa.noahblanchard.fr/api/places");
             let lesMatchs = []
 
             for (let reserv of response.data.reservations) {
-
-
-
-
-
-
-
-
                 lesMatchs.push(reserv);
 
                 // let split = response2.data.idMatch.split("/");
                 // response2.data.idCourt = parseInt(response2.data.idCourt[response2.data.idCourt.length - 1]);
                 // response2.data.idMatch = parseInt(split[3]);
                 // reservations.push(response2.data)
-
             }
             lesMatchs = lesMatchs.filter(p => {
                 return p.jour == id;
@@ -97,21 +145,16 @@ const Reserver = () => {
                         nom1: joueur1.data.nom,
                         nom2: joueur2.data.nom
                     });
-
-
-
                 }
-
-
                 setJoueurs(tab);
             }
-            console.log(lesMatchs);
+
+
+            setLesPlaces(places.data["hydra:member"]);
             setMatchs(lesMatchs);
             setChargement(false);
 
-
-
-        } catch {
+        } catch (ex) {
         }
 
 
@@ -124,14 +167,32 @@ const Reserver = () => {
         }
     }
 
-    const newBillet = async () => {
+
+    const newBillet = async (r) => {
         try {
+
+            let response;
+
+            let idR = -1;
+
+            if (place != -1 && tribune != -1 && selected != -1) {
+                response = await axios.post("http://cpoa.noahblanchard.fr/api/reserv_places", {
+                    rencontre: "api/rencontres/" + selected,
+                    place: "api/places/" + place
+                });
+                idR = await response.data.id;
+            }
+
+
+
+            console.log(idR);
 
             console.log(await axios.post("http://cpoa.noahblanchard.fr/api/billets", {
                 jour: parseInt(id),
                 prix: 25,
-                rencontre: "api/rencontres/" + selected
-            }))
+                rencontre: "api/rencontres/" + selected,
+                place: "api/reserv_places/" + idR
+            }));
 
             console.log("api/rencontres/" + selected);
 
@@ -157,15 +218,59 @@ const Reserver = () => {
     }, [])
 
 
+    const displayModal = () => {
+
+    }
+
+    const modalstyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 500,
+        backgroundColor: 'white',
+        borderRadius: '10px',
+        boxShadow: 24,
+        padding: "2%"
+    };
 
     return (
-        <div className={styles.reservPage + " page"}>
-            <form onSubmit={handleSubmit} className={styles.form}>
 
-                <Box sx={{ minWidth: 120 }}>
-                    {matchs ?
-                        <>
-                            <h3>Choisir un match et une place du court central</h3>
+        <>
+
+            <Modal
+                open={open}
+                onClose={() => setOpen(!open)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box style={modalstyle}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Catégorie 1
+                    </Typography>
+                    <ul>
+                        <li>Tarif plein - Dimanche-Mardi 30€ / Mercredi 40€ / Jeudi 45€ / Vendredi-Samedi 60€ </li>
+                        <li>Tarif licencié - Dimanche-Mardi 25€ / Mercredi 35€ / Jeudi 39€ / Vendredi-Samedi 50€ </li>
+                    </ul>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        Catégorie 2
+                    </Typography>
+                    <ul>
+                        <li>Tarif enfants (-12) / Dimanche-Mardi 20€ / Mercredi 25€ / Jeudi 30€ / Vendredi-Samedi 38€ </li>
+                        <li>Tarif plein - Dimanche-Mardi 25€ / Mercredi 30€ / Jeudi 35€ / Vendredi-Samedi 48€ </li>
+                        <li>Tarif licencié - Dimanche-Mardi 20€ / Mercredi 25€ / Jeudi 30€ / Vendredi-Samedi 38€ </li>
+                    </ul>
+                </Box>
+            </Modal>
+
+
+            <div className={styles.reservPage + " page"}>
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    <div className={styles.wrapperForm}>
+
+                        <Box sx={{ minWidth: 200 }}>
+
+                            <h3>Choisissez un match du court central</h3>
                             <FormControl fullWidth>
 
                                 <InputLabel id="demo-simple-select-label">Match</InputLabel>
@@ -175,6 +280,7 @@ const Reserver = () => {
                                     value={selected}
                                     label="Match"
                                     onChange={handleChange}
+                                    helperText="Matchs du court principal uniquement"
                                 >
                                     <MenuItem key={-1} value={-1}>Ne pas réserver de place</MenuItem>
                                     {
@@ -209,10 +315,11 @@ const Reserver = () => {
                                     onChange={(e) => setTribune(e.target.value)}
                                     disabled={selected != "" && selected != -1 ? false : true}
                                 >
+                                    <MenuItem value={-1}>Choix de la tribune</MenuItem>
                                     <MenuItem value={"Ouest"}>Tribune Ouest</MenuItem>
-                                    <MenuItem value={"Ouest"}>Tribune Nord</MenuItem>
-                                    <MenuItem value={"Ouest"}>Tribune Sud</MenuItem>
-                                    <MenuItem value={"Ouest"}>Tribune Est</MenuItem>
+                                    <MenuItem value={"Nord"}>Tribune Nord</MenuItem>
+                                    <MenuItem value={"Sud"}>Tribune Sud</MenuItem>
+                                    <MenuItem value={"Est"}>Tribune Est</MenuItem>
                                 </Select>
 
 
@@ -227,18 +334,24 @@ const Reserver = () => {
                                     onChange={handleChangePlace}
                                     disabled={selected != "" && selected != -1 ? false : true}
                                 >
-                                    
+
+                                    <MenuItem value={-1}>Choix de la place</MenuItem>
+                                    {
+                                        tribune != -1 && mapPlace()
+                                    }
 
                                 </Select>
                             </FormControl>
+                        </Box>
+                        <Box sx={{ minWidth: 200 }}>
                             <h3>Entrez vos infos personnelles</h3>
                             <TextField
                                 required
                                 id="outlined-required"
                                 label="Nom"
                                 defaultValue=""
-                                error={selected == '' || selected == -1 ? true : false}
-                                disabled={selected == '' || selected == -1 ? true : false}
+                                error={!selected ? true : false}
+                                disabled={!selected ? true : false}
                                 value={nom}
                                 onChange={(e) => setNom(e.target.value)}
                             />
@@ -249,9 +362,19 @@ const Reserver = () => {
                                 defaultValue=""
                                 value={prenom}
                                 onChange={(e) => setPrenom(e.target.value)}
-                                error={selected == '' || selected == -1 ? true : false}
+                                error={!selected ? true : false}
 
-                                disabled={selected == '' || selected == -1 ? true : false}
+                                disabled={!selected ? true : false}
+                            />
+                            <TextField
+                                id="outlined-number"
+                                label="Age"
+                                type="number"
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
                             />
                             <TextField
                                 required
@@ -261,33 +384,35 @@ const Reserver = () => {
                                 defaultValue=""
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                error={selected == '' || selected == -1 ? true : false}
+                                error={!selected ? true : false}
 
-                                disabled={selected == '' || selected == -1 ? true : false}
+                                disabled={!selected ? true : false}
                             />
                             <TextField
                                 required
-                                id="outlined-required"
+                                id="outlined-password-input"
                                 label="Code secret"
                                 type="password"
                                 defaultValue=""
                                 value={pass}
                                 onChange={(e) => setPass(e.target.value)}
-                                error={selected == '' || selected == -1 ? true : false}
+                                error={!selected ? true : false}
 
-                                disabled={selected == '' || selected == -1 ? true : false}
+                                disabled={!selected ? true : false}
                                 helperText="Pour retrouver votre réservation"
-                            /></>
-                        : <h1>Chargement</h1>}
-
+                            />
+                        </Box>
+                    </div>
                     <div className={styles.inlineDiv}>
-                        <Button variant="outlined">Précédent</Button>
+                        <Button variant="outlined" onClick={() => navigate("/")}>Précédent</Button>
+                        <Link style={{ cursor: "pointer" }} onClick={() => setOpen(!open)}>Informations tarifaires</Link>
                         <Button variant="contained" type="submit">Suivant</Button>
                     </div>
 
-                </Box>
-            </form>
-        </div>
+                </form>
+            </div>
+
+        </>
     )
 }
 

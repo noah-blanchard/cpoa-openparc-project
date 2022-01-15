@@ -121,9 +121,11 @@ class Rencontre
 
     /**
      * @ORM\OneToMany(targetEntity=ReservPlace::class, mappedBy="rencontre")
-     * @Groups({"read"})
+     * @Groups({"read", "write"})
      */
     private $placesReservees;
+
+    
 
     public function __construct()
     {
@@ -357,4 +359,6 @@ class Rencontre
 
         return $this;
     }
+
+    
 }

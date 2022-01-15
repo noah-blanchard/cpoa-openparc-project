@@ -1,5 +1,7 @@
-.landingPage{
-    
+.reservPage{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .ticketDiv{
@@ -13,24 +15,47 @@
 .form{
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
-    height:50%;
+    justify-content: space-around;
+    height:80%;
+    width:70%;
+    align-items: center;
+}
+
+.form > .wrapperForm{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width:100%;
 
 }
 
-.form > div{
+.form > div.wrapperForm > div{
     display:flex;
     flex-direction: column;
-
+    width:40%;
     gap:20px;
+    height: 100%;
+
+
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    background-color:#ffffff;
+    border-radius:10px;
+    padding:2%;
+
 }
 
 .inlineDiv{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width:50%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    background-color:#ffffff;
+    border-radius:10px;
+    padding:2%;
+    width: 90%;
 }
 
 .inlineDiv > button{
-    width:45%;
+    width:20%;
 }

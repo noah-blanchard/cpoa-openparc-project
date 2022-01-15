@@ -25,11 +25,7 @@ class ReservPlace
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=rencontre::class, inversedBy="placesReservees")
-     * @Groups({"read", "write"})
-     */
-    private $rencontre;
+    
 
     /**
      * @ORM\ManyToOne(targetEntity=Place::class)
@@ -37,22 +33,18 @@ class ReservPlace
      */
     private $place;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Rencontre::class, inversedBy="placesReservees")
+     * @Groups({"read", "write"})
+     */
+    private $rencontre;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getRencontre(): ?rencontre
-    {
-        return $this->rencontre;
-    }
 
-    public function setRencontre(?rencontre $rencontre): self
-    {
-        $this->rencontre = $rencontre;
-
-        return $this;
-    }
 
     public function getPlace(): ?Place
     {
@@ -62,6 +54,18 @@ class ReservPlace
     public function setPlace(?Place $place): self
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getRencontre(): ?Rencontre
+    {
+        return $this->rencontre;
+    }
+
+    public function setRencontre(?Rencontre $rencontre): self
+    {
+        $this->rencontre = $rencontre;
 
         return $this;
     }

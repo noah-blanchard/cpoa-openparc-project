@@ -44,6 +44,12 @@ class Billet
      */
     private $rencontre;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ReservPlace::class, cascade={"persist", "remove"})
+     * @Groups({"write", "read"})
+     */
+    private $place;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -81,6 +87,18 @@ class Billet
     public function setRencontre(?Rencontre $rencontre): self
     {
         $this->rencontre = $rencontre;
+
+        return $this;
+    }
+
+    public function getPlace(): ?ReservPlace
+    {
+        return $this->place;
+    }
+
+    public function setPlace(?ReservPlace $place): self
+    {
+        $this->place = $place;
 
         return $this;
     }

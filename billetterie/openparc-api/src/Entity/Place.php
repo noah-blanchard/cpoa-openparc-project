@@ -31,6 +31,12 @@ class Place
      */
     private $tribune;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"read", "write"})
+     */
+    private $cat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +50,18 @@ class Place
     public function setTribune(?string $tribune): self
     {
         $this->tribune = $tribune;
+
+        return $this;
+    }
+
+    public function getCat(): ?int
+    {
+        return $this->cat;
+    }
+
+    public function setCat(?int $cat): self
+    {
+        $this->cat = $cat;
 
         return $this;
     }
