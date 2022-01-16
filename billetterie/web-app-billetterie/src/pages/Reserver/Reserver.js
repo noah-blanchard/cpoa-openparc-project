@@ -23,12 +23,20 @@ const Reserver = () => {
     const [open, setOpen] = useState(false);
     const [age, setAge] = useState(0);
 
+    const [passConf, setPassConf] = useState('');
+
+    const [validate, setValidate] = useState(false)
+
+    const [promo, setPromo] = useState('');
+
     const navigate = useNavigate();
 
     const [matchs, setMatchs] = useState([]);
+    const [selectMatch, setSelectMatch] = useState({})
     const [joueurs, setJoueurs] = useState([]);
     const [lesPlaces, setLesPlaces] = useState([]);
     const [placesDispo, setPlacesDispo] = useState([]);
+
 
     const [selected, setSelected] = useState(-1);
     const [place, setPlace] = useState(-1);
@@ -41,6 +49,7 @@ const Reserver = () => {
     const [prenom, setPrenom] = useState('');
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
+    const [tel, setTel] = useState("");
 
     const { id } = useParams();
 
@@ -56,7 +65,9 @@ const Reserver = () => {
             const selectedMatch = matchs.filter(m => {
                 return m.idMatch.id == event.target.value;
             })[0].idMatch;
-            console.log(selectedMatch);
+
+            setSelectMatch(selectedMatch);
+
             filterPlace(selectedMatch.placesReservees);
         } else {
             setTribune(-1); setPlace(-1);
@@ -102,9 +113,9 @@ const Reserver = () => {
 
 
     const getJoueurById = async (idJ, idJ2, idR) => {
-        let response = await axios.get("http://cpoa.noahblanchard.fr/api/joueurs/" + idJ);
+        let response = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + idJ);
         let data = await response.data;
-        let response2 = await axios.get("http://cpoa.noahblanchard.fr/api/joueurs/" + idJ2);
+        let response2 = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + idJ2);
         let data2 = await response2.data;
 
         const id = await {
@@ -115,11 +126,10 @@ const Reserver = () => {
 
         return id;
     }
-
     const getMatchsPrincipal = async () => {
         try {
-            let response = await axios.get("http://cpoa.noahblanchard.fr/api/courts/1");
-            let places = await axios.get("http://cpoa.noahblanchard.fr/api/places");
+            let response = await axios.get("https://cpoa.noahblanchard.fr/api/courts/1");
+            let places = await axios.get("https://cpoa.noahblanchard.fr/api/places");
             let lesMatchs = []
 
             for (let reserv of response.data.reservations) {
@@ -137,8 +147,8 @@ const Reserver = () => {
             let tab = []
             if (lesMatchs.length > 0) {
                 for (let match of lesMatchs) {
-                    let joueur1 = await axios.get("http://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur1);
-                    let joueur2 = await axios.get("http://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur2);
+                    let joueur1 = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur1);
+                    let joueur2 = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur2);
 
                     tab.push({
                         idR: match.idMatch.id,
@@ -161,9 +171,18 @@ const Reserver = () => {
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        if (nom && prenom && email && pass) {
-            newBillet();
+        console.log("HELLo")
+
+        if (passConf == pass) {
+            console.log("hello2")
+            if (nom.length > 0 && prenom.length > 0 && email.length > 0 && pass.length > 0) {
+                
+                newBillet();
+                
+            }
+
+        } else {
+            alert("Veuillez confirmer le mot de passe entré auparavant !")
         }
     }
 
@@ -176,7 +195,7 @@ const Reserver = () => {
             let idR = -1;
 
             if (place != -1 && tribune != -1 && selected != -1) {
-                response = await axios.post("http://cpoa.noahblanchard.fr/api/reserv_places", {
+                response = await axios.post("https://cpoa.noahblanchard.fr/api/reserv_places", {
                     rencontre: "api/rencontres/" + selected,
                     place: "api/places/" + place
                 });
@@ -185,24 +204,33 @@ const Reserver = () => {
 
 
 
-            console.log(idR);
+            
 
-            console.log(await axios.post("http://cpoa.noahblanchard.fr/api/billets", {
+            console.log({
                 jour: parseInt(id),
                 prix: 25,
-                rencontre: "api/rencontres/" + selected,
                 place: "api/reserv_places/" + idR
+            })
+
+            let idClient
+            response = await axios.post("https://cpoa.noahblanchard.fr/api/clients", {
+                nom: nom,
+                telephone: tel,
+                email: email,
+                licence: promo,
+                age: parseInt(age),
+                prenom: prenom
+            })
+            idClient = await response.data.id; 
+
+            console.log(await axios.post("https://cpoa.noahblanchard.fr/api/billets", {
+                jour: parseInt(id),
+                prix: 25,
+                place: "api/reserv_places/" + idR,
+                client: "api/clients/" + idClient
             }));
 
             console.log("api/rencontres/" + selected);
-
-            await axios.post("http://cpoa.noahblanchard.fr/api/clients", {
-                nom: nom,
-                telephone: prenom,
-                email: email,
-                licence: 1234,
-                age: 18
-            })
 
 
             console.log("C'est bon 1")
@@ -236,7 +264,10 @@ const Reserver = () => {
 
     return (
 
+
+
         <>
+
 
             <Modal
                 open={open}
@@ -265,151 +296,217 @@ const Reserver = () => {
 
 
             <div className={styles.reservPage + " page"}>
-                <form onSubmit={handleSubmit} className={styles.form}>
-                    <div className={styles.wrapperForm}>
+                {!validate ?
+                    <form onSubmit={() => setValidate(!validate)} className={styles.form}>
+                        <div className={styles.wrapperForm}>
 
-                        <Box sx={{ minWidth: 200 }}>
+                            <Box sx={{ minWidth: 200 }}>
 
-                            <h3>Choisissez un match du court central</h3>
-                            <FormControl fullWidth>
+                                <h3>Choisissez un match du court central</h3>
+                                <FormControl fullWidth>
 
-                                <InputLabel id="demo-simple-select-label">Match</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={selected}
-                                    label="Match"
-                                    onChange={handleChange}
-                                    helperText="Matchs du court principal uniquement"
-                                >
-                                    <MenuItem key={-1} value={-1}>Ne pas réserver de place</MenuItem>
-                                    {
-                                        !chargement ?
-                                            matchs.map((m) => {
+                                    <InputLabel id="demo-simple-select-label">Match</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={selected}
+                                        label="Match"
+                                        onChange={handleChange}
+                                        helperText="Matchs du court principal uniquement"
+                                    >
+                                        <MenuItem key={-1} value={-1}>Ne pas réserver de place</MenuItem>
+                                        {
+                                            !chargement ?
+                                                matchs.map((m) => {
 
 
-                                                let j = joueurs.find(je => {
-                                                    return je.idR == m.idMatch.id;
+                                                    let j = joueurs.find(je => {
+                                                        return je.idR == m.idMatch.id;
+                                                    })
+                                                    return <MenuItem key={m.idMatch.id} value={m.idMatch.id}>{m.idMatch.id} - {j.nom1} contre {j.nom2 != "-1" ? j.nom2 : "Non Déterminé"} - {m.heure}:{m.minute}0</MenuItem>
                                                 })
+                                                :
+                                                <MenuItem key={0} value={0}>Chargement...</MenuItem>
+                                        }
+                                    </Select>
+                                </FormControl>
+
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Tribune</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={tribune}
+                                        label="Tribune"
+                                        onChange={(e) => setTribune(e.target.value)}
+                                        disabled={selected != "" && selected != -1 ? false : true}
+                                    >
+                                        <MenuItem value={-1}>Choix de la tribune</MenuItem>
+                                        <MenuItem value={"Ouest"}>Tribune Ouest</MenuItem>
+                                        <MenuItem value={"Nord"}>Tribune Nord</MenuItem>
+                                        <MenuItem value={"Sud"}>Tribune Sud</MenuItem>
+                                        <MenuItem value={"Est"}>Tribune Est</MenuItem>
+                                    </Select>
 
 
+                                </FormControl>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Place</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={place}
+                                        label="Place"
+                                        onChange={handleChangePlace}
+                                        disabled={selected != "" && selected != -1 ? false : true}
+                                    >
 
+                                        <MenuItem value={-1}>Choix de la place</MenuItem>
+                                        {
+                                            tribune != -1 && mapPlace()
+                                        }
+                                    </Select>
+                                </FormControl>
 
+                                <h3>Code promo ou numéro de licence</h3>
 
-                                                return <MenuItem key={m.idMatch.id} value={m.idMatch.id}>{m.idMatch.id} - {j.nom1} contre {j.nom2 != "-1" ? j.nom2 : "Non Déterminé"} - {m.heure}:{m.minute}0</MenuItem>
+                                <TextField
+                                    id="outlined"
+                                    label="Code Promo"
+                                    defaultValue=""
+                                    value={promo}
+                                    onChange={(e) => setPromo(e.target.value)}
+                                />
+                            </Box>
+                            <Box sx={{ minWidth: 200 }}>
+                                <h3>Entrez vos infos personnelles</h3>
+                                <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="Nom"
+                                    defaultValue=""
+                                    error={!selected ? true : false}
+                                    disabled={!selected ? true : false}
+                                    value={nom}
+                                    onChange={(e) => setNom(e.target.value)}
+                                />
+                                <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="Prenom"
+                                    defaultValue=""
+                                    value={prenom}
+                                    onChange={(e) => setPrenom(e.target.value)}
+                                    error={!selected ? true : false}
 
-                                            })
-                                            :
-                                            <MenuItem key={0} value={0}>Chargement...</MenuItem>
-                                    }
-                                </Select>
-                            </FormControl>
-                            <FormControl fullWidth>
+                                    disabled={!selected ? true : false}
+                                />
+                                <TextField
+                                    id="outlined-number"
+                                    label="Age"
+                                    type="number"
+                                    value={age}
+                                    onChange={(e) => setAge(e.target.value)}
+                                    InputLabelProps={{
+                                        shrink: true,
+                                    }}
+                                />
+                                <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="Email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    error={!selected ? true : false}
 
-                                <InputLabel id="demo-simple-select-label">Tribune</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={tribune}
-                                    label="Tribune"
-                                    onChange={(e) => setTribune(e.target.value)}
-                                    disabled={selected != "" && selected != -1 ? false : true}
-                                >
-                                    <MenuItem value={-1}>Choix de la tribune</MenuItem>
-                                    <MenuItem value={"Ouest"}>Tribune Ouest</MenuItem>
-                                    <MenuItem value={"Nord"}>Tribune Nord</MenuItem>
-                                    <MenuItem value={"Sud"}>Tribune Sud</MenuItem>
-                                    <MenuItem value={"Est"}>Tribune Est</MenuItem>
-                                </Select>
+                                    disabled={!selected ? true : false}
+                                />
+                                <TextField
+                                    required
+                                    id="outlined-required"
+                                    label="Telephone"
+                                    error={!selected ? true : false}
+                                    disabled={!selected ? true : false}
+                                    value={tel}
+                                    onChange={(e) => setTel(e.target.value)}
+                                />
+                                <TextField
+                                    required
+                                    id="outlined-password-input"
+                                    label="Code secret"
+                                    type="password"
+                                    defaultValue=""
+                                    value={pass}
+                                    onChange={(e) => setPass(e.target.value)}
+                                    error={!selected ? true : false}
 
-
-                            </FormControl>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Place</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={place}
-                                    label="Place"
-                                    onChange={handleChangePlace}
-                                    disabled={selected != "" && selected != -1 ? false : true}
-                                >
-
-                                    <MenuItem value={-1}>Choix de la place</MenuItem>
+                                    disabled={!selected ? true : false}
+                                    helperText="Pour retrouver votre réservation"
+                                />
+                            </Box>
+                        </div>
+                        <div className={styles.inlineDiv}>
+                            <Button variant="outlined" onClick={() => navigate("/")}>Précédent</Button>
+                            <Link style={{ cursor: "pointer" }} onClick={() => setOpen(!open)}>Informations tarifaires</Link>
+                            <Button variant="contained" type="submit">Suivant</Button>
+                        </div>
+                    </form>
+                    :
+                    <>
+                        <div className={styles.wrapperForm}>
+                            <div className={styles.validateBox}>
+                                <h3>Informations personnelles</h3>
+                                <ul>
+                                    <li>
+                                        Nom : {nom}
+                                    </li>
+                                    <li>
+                                        Prenom : {prenom}
+                                    </li>
+                                    <li>
+                                        Age : {age}
+                                    </li>
+                                    <li>
+                                        Email : {email}
+                                    </li>
+                                    <li>
+                                        Téléphone : {tel}
+                                    </li>
+                                    <li>
+                                        <TextField
+                                            required
+                                            id="outlined-password-input"
+                                            label="Confirmez votre code secret"
+                                            type="password"
+                                            defaultValue=""
+                                            value={passConf}
+                                            onChange={(e) => setPassConf(e.target.value)}
+                                        />
+                                    </li>
+                                </ul>
+                            </div>
+                            <div className={styles.validateBox}>
+                                <h3>Infos du billets</h3>
+                                <ul>
                                     {
-                                        tribune != -1 && mapPlace()
+                                        selected == -1 ?
+                                            <li>Match : aucun match sélectionné</li>
+                                            :
+
+                                            <li>Match : {selectMatch.idJoueur1} contre {selectMatch.idJoueur2}</li>
                                     }
+                                </ul>
+                            </div>
+                        </div>
+                        <div className={styles.inlineDiv}>
+                            <Button variant="outlined" onClick={() => setValidate(!validate)}>Précédent</Button>
+                            <Link style={{ cursor: "pointer" }} onClick={() => setOpen(!open)}>Informations tarifaires</Link>
+                            <Button variant="contained" onClick={handleSubmit}>Passer au paiement</Button>
+                        </div>
+                    </>
 
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        <Box sx={{ minWidth: 200 }}>
-                            <h3>Entrez vos infos personnelles</h3>
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Nom"
-                                defaultValue=""
-                                error={!selected ? true : false}
-                                disabled={!selected ? true : false}
-                                value={nom}
-                                onChange={(e) => setNom(e.target.value)}
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Prenom"
-                                defaultValue=""
-                                value={prenom}
-                                onChange={(e) => setPrenom(e.target.value)}
-                                error={!selected ? true : false}
-
-                                disabled={!selected ? true : false}
-                            />
-                            <TextField
-                                id="outlined-number"
-                                label="Age"
-                                type="number"
-                                value={age}
-                                onChange={(e) => setAge(e.target.value)}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Email"
-                                type="email"
-                                defaultValue=""
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                error={!selected ? true : false}
-
-                                disabled={!selected ? true : false}
-                            />
-                            <TextField
-                                required
-                                id="outlined-password-input"
-                                label="Code secret"
-                                type="password"
-                                defaultValue=""
-                                value={pass}
-                                onChange={(e) => setPass(e.target.value)}
-                                error={!selected ? true : false}
-
-                                disabled={!selected ? true : false}
-                                helperText="Pour retrouver votre réservation"
-                            />
-                        </Box>
-                    </div>
-                    <div className={styles.inlineDiv}>
-                        <Button variant="outlined" onClick={() => navigate("/")}>Précédent</Button>
-                        <Link style={{ cursor: "pointer" }} onClick={() => setOpen(!open)}>Informations tarifaires</Link>
-                        <Button variant="contained" type="submit">Suivant</Button>
-                    </div>
-
-                </form>
+                }
             </div>
 
         </>

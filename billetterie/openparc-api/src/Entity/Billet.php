@@ -39,16 +39,16 @@ class Billet
     private $prix;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Rencontre::class)
-     * @Groups({"write", "read"})
-     */
-    private $rencontre;
-
-    /**
      * @ORM\OneToOne(targetEntity=ReservPlace::class, cascade={"persist", "remove"})
      * @Groups({"write", "read"})
      */
     private $place;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Client::class, cascade={"persist", "remove"})
+     * @Groups({"write", "read"})
+     */
+    private $client;
 
     public function getId(): ?int
     {
@@ -79,18 +79,6 @@ class Billet
         return $this;
     }
 
-    public function getRencontre(): ?Rencontre
-    {
-        return $this->rencontre;
-    }
-
-    public function setRencontre(?Rencontre $rencontre): self
-    {
-        $this->rencontre = $rencontre;
-
-        return $this;
-    }
-
     public function getPlace(): ?ReservPlace
     {
         return $this->place;
@@ -99,6 +87,18 @@ class Billet
     public function setPlace(?ReservPlace $place): self
     {
         $this->place = $place;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

@@ -28,33 +28,39 @@ class Client
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"write"})
+     * @Groups({"write", "read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"write"})
+     * @Groups({"write", "read"})
      */
     private $telephone;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"write"})
+     * @Groups({"write", "read"})
      */
     private $email;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Groups({"write"})
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"write", "read"})
      */
     private $licence;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"write"})
+     * @Groups({"write", "read"})
      */
     private $age;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"write", "read"})
+     */
+    private $prenom;
 
     public function getId(): ?int
     {
@@ -97,12 +103,12 @@ class Client
         return $this;
     }
 
-    public function getLicence(): ?int
+    public function getLicence(): ?string
     {
         return $this->licence;
     }
 
-    public function setLicence(int $licence): self
+    public function setLicence(string $licence): self
     {
         $this->licence = $licence;
 
@@ -117,6 +123,18 @@ class Client
     public function setAge(int $age): self
     {
         $this->age = $age;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(?string $prenom): self
+    {
+        $this->prenom = $prenom;
 
         return $this;
     }
