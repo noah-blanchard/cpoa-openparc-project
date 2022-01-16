@@ -40,6 +40,7 @@ const Reserver = () => {
 
     const [selected, setSelected] = useState(-1);
     const [place, setPlace] = useState(-1);
+    const [cate, setCate] = useState(2);
 
     const [chargement, setChargement] = useState(true);
 
@@ -50,6 +51,7 @@ const Reserver = () => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const [tel, setTel] = useState("");
+    const [prix, setPrix] = useState(0);
 
     const { id } = useParams();
 
@@ -176,9 +178,9 @@ const Reserver = () => {
         if (passConf == pass) {
             console.log("hello2")
             if (nom.length > 0 && prenom.length > 0 && email.length > 0 && pass.length > 0) {
-                
+
                 newBillet();
-                
+
             }
 
         } else {
@@ -204,7 +206,7 @@ const Reserver = () => {
 
 
 
-            
+
 
             console.log({
                 jour: parseInt(id),
@@ -221,21 +223,19 @@ const Reserver = () => {
                 age: parseInt(age),
                 prenom: prenom
             })
-            idClient = await response.data.id; 
+            idClient = await response.data.id;
 
-            console.log(await axios.post("https://cpoa.noahblanchard.fr/api/billets", {
+            response = await axios.post("https://cpoa.noahblanchard.fr/api/billets", {
                 jour: parseInt(id),
-                prix: 25,
+                prix: prix,
                 place: "api/reserv_places/" + idR,
                 client: "api/clients/" + idClient
-            }));
+            });
+            let idBillet = await response.data.id;
 
-            console.log("api/rencontres/" + selected);
-
-
-            console.log("C'est bon 1")
+            navigate("/confirmation/" + idBillet);
         } catch (ex) {
-            console.log(ex)
+            alert("Erreur")
         }
     }
 
@@ -245,10 +245,6 @@ const Reserver = () => {
 
     }, [])
 
-
-    const displayModal = () => {
-
-    }
 
     const modalstyle = {
         position: 'absolute',
@@ -261,6 +257,84 @@ const Reserver = () => {
         boxShadow: 24,
         padding: "2%"
     };
+
+    const submitForm = (e) => {
+        e.preventDefault();
+        calcPrix();
+        setValidate(!validate)
+        console.log(place);
+    }
+
+    const calcPrix = async () => {
+        let response;
+        let cat = 2
+        let p;
+        if (place != -1) {
+            response = await axios.get("https://cpoa.noahblanchard.fr/api/places/" + place);
+            cat = response.data.cat;
+        }
+
+        if (cat == 2) {
+            if (promo.length > 0) {
+                if (parseInt(id) <= 3) {
+                    p = 20
+                } else if (parseInt(id) == 4) {
+                    p = 25
+                } else if (parseInt(id) == 5) {
+                    p = 30
+                } else if (parseInt(id) >= 6) {
+                    p = 38
+                }
+            } else if (age <= 12) {
+                if (parseInt(id) <= 3) {
+                    p = 20
+                } else if (parseInt(id) == 4) {
+                    p = 25
+                } else if (parseInt(id) == 5) {
+                    p = 30
+                } else if (parseInt(id) >= 6) {
+                    p = 38
+                }
+            } else {
+                if (parseInt(id) <= 3) {
+                    p = 25
+                } else if (parseInt(id) == 4) {
+                    p = 30
+                } else if (parseInt(id) == 5) {
+                    p = 35
+                } else if (parseInt(id) >= 6) {
+                    p = 48
+                }
+            }
+        } else {
+            if (promo.length > 0) {
+                if (parseInt(id) <= 3) {
+                    p = 25
+                } else if (parseInt(id) == 4) {
+                    p = 35
+                } else if (parseInt(id) == 5) {
+                    p = 39
+                } else if (parseInt(id) >= 6) {
+                    p = 50
+                }
+            } else {
+                if (parseInt(id) <= 3) {
+                    p = 30
+                } else if (parseInt(id) == 4) {
+                    p = 40
+                } else if (parseInt(id) == 5) {
+                    p = 45
+                } else if (parseInt(id) >= 6) {
+                    p = 60
+                }
+            }
+        }
+
+        setCate(cat);
+
+        setPrix(p);
+
+    }
 
     return (
 
@@ -297,7 +371,7 @@ const Reserver = () => {
 
             <div className={styles.reservPage + " page"}>
                 {!validate ?
-                    <form onSubmit={() => setValidate(!validate)} className={styles.form}>
+                    <form onSubmit={submitForm} className={styles.form}>
                         <div className={styles.wrapperForm}>
 
                             <Box sx={{ minWidth: 200 }}>
@@ -372,6 +446,7 @@ const Reserver = () => {
 
                                 <TextField
                                     id="outlined"
+                                    helperText="Code promo ou numéro de licence"
                                     label="Code Promo"
                                     defaultValue=""
                                     value={promo}
@@ -493,9 +568,15 @@ const Reserver = () => {
                                         selected == -1 ?
                                             <li>Match : aucun match sélectionné</li>
                                             :
+                                            <>
+                                                <li>Match : {selectMatch.idJoueur1} contre {selectMatch.idJoueur2}</li>
+                                                <li>Place : {place}</li>
+                                            </>
 
-                                            <li>Match : {selectMatch.idJoueur1} contre {selectMatch.idJoueur2}</li>
                                     }
+                                    <li>Categorie : {cate}</li>
+                                    <li>Code promo ou licence : {promo.length > 0 ? "Oui" : "Non"}</li>
+                                    <li>Prix : {prix}</li>
                                 </ul>
                             </div>
                         </div>

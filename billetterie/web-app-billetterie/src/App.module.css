@@ -9,3 +9,34 @@
     width:70%;
     height:70%;
 }
+
+.navBar{
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height:70px;
+    background-color: #fff;
+    box-sizing: border-box;
+    position: fixed;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+.navBar > ul{
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    width:40%;
+    
+}
+
+li > a{
+    text-decoration: none;
+    background-color: #1976d2;
+    color: white;
+    font-size: 0.8em;
+    padding: 2%;
+    text-transform: uppercase;
+    width:45%;
+}
+
