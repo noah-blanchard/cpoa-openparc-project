@@ -228,7 +228,9 @@ const Reserver = () => {
                 jour: parseInt(id),
                 prix: prix,
                 place: idR,
-                client: "api/clients/" + idClient
+                client: "api/clients/" + idClient,
+                email: email,
+                code: pass
             });
             let idBillet = await response.data.id;
 

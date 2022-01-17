@@ -50,6 +50,18 @@ class Billet
      */
     private $client;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"write", "read"})
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"write", "read"})
+     */
+    private $code;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -99,6 +111,30 @@ class Billet
     public function setClient(?Client $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(?string $code): self
+    {
+        $this->code = $code;
 
         return $this;
     }

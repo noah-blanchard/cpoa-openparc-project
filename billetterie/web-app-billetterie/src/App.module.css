@@ -24,19 +24,46 @@
 
 .navBar > ul{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     list-style: none;
-    width:40%;
+    width:50%;
+
+    height:100%;
+    align-items: center;
     
 }
 
-li > a{
+
+li.link{
+    width:30%; 
+    height:100%; 
+
+    align-items: center;
+    display: flex;
+    justify-content: center;
+
+    
+}
+
+li.active{
+    border-bottom: blue solid 1.5px;
+}
+
+li.link:hover{
+    border-bottom: blue solid 1.5px;
+}
+
+li.link > a{
     text-decoration: none;
-    background-color: #1976d2;
-    color: white;
+font-weight: 600;
+    color: #121212;
     font-size: 0.8em;
     padding: 2%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-transform: uppercase;
-    width:45%;
+
 }
 
