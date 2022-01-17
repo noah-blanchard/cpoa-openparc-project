@@ -39,7 +39,7 @@ class Billet
     private $prix;
 
     /**
-     * @ORM\OneToOne(targetEntity=ReservPlace::class, cascade={"persist", "remove"})
+     * @ORM\Column(type="integer")
      * @Groups({"write", "read"})
      */
     private $place;
@@ -79,12 +79,12 @@ class Billet
         return $this;
     }
 
-    public function getPlace(): ?ReservPlace
+    public function getPlace(): ?int
     {
         return $this->place;
     }
 
-    public function setPlace(?ReservPlace $place): self
+    public function setPlace(?int $place): self
     {
         $this->place = $place;
 

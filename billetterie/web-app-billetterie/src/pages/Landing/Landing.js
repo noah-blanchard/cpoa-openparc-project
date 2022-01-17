@@ -27,22 +27,22 @@ function Landing() {
     {
       day:5,
       title:"Mercredi 18 mai 2022",
-      reservable:true
+      reservable:false
     },
     {
       day:6,
       title:"Jeudi 19 mai 2022",
-      reservable:true
+      reservable:false
     },
     {
       day:7,
       title:"Vendredi 20 mai 2022",
-      reservable:true
+      reservable:false
     },
     {
       day:8,
       title:"Samedi 21 mai 2022",
-      reservable:true
+      reservable:false
     }
   ]
 

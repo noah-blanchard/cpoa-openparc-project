@@ -136,6 +136,7 @@ const Reserver = () => {
 
             for (let reserv of response.data.reservations) {
                 lesMatchs.push(reserv);
+                console.log(reserv)
 
                 // let split = response2.data.idMatch.split("/");
                 // response2.data.idCourt = parseInt(response2.data.idCourt[response2.data.idCourt.length - 1]);
@@ -161,7 +162,7 @@ const Reserver = () => {
                 setJoueurs(tab);
             }
 
-
+            console.log(lesMatchs)
             setLesPlaces(places.data["hydra:member"]);
             setMatchs(lesMatchs);
             setChargement(false);
@@ -228,7 +229,7 @@ const Reserver = () => {
             response = await axios.post("https://cpoa.noahblanchard.fr/api/billets", {
                 jour: parseInt(id),
                 prix: prix,
-                place: "api/reserv_places/" + idR,
+                place: idR,
                 client: "api/clients/" + idClient
             });
             let idBillet = await response.data.id;

@@ -13,10 +13,13 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import models.DAOBillet;
 import models.DAOJoueur;
 import models.DAOMatchs;
 import models.DAOPlanning;
+import models.DAORamasseurs;
 import models.DAOReservCourt;
+import models.DAOReservPlace;
 import models.Joueur;
 import models.Match;
 import models.Planning;
@@ -66,16 +69,18 @@ public class PlanningController {
         if (Planning.getPlannings().isEmpty()) {
             getAll();
         }
-        Planning p = Planning.getPlannings().get(0);
+        Planning p = Planning.getPlannings().get(1);
         p.getNewMatchs().clear();
         ArrayList<Joueur> j = Joueur.getjSimple();
         Collections.shuffle(j);
+        ArrayList<Integer> equipesRamasseurs = DAORamasseurs.getEquipesRamasseurs();
 
         int n = 0;
         int jour = 2;
         int heure = 14;
         int minute = 0;
         int court = 1;
+        int c = 0;
         for (int i = 0; i < 16; ++i) {
 
             int matchId1 = ThreadLocalRandom.current().nextInt(1, 9999 + 1);
@@ -85,7 +90,12 @@ public class PlanningController {
             if (n < 24) {
                 j2 = j.get(n++).getId();
             }
-            Match m = new Match(matchId1, 1, "Seizième", -1, -1, "", (byte) 0, idJoueur, (j2 > -1 ? j2 : -1), -1, -1, -1, -1, rId1);
+
+            if (c == 10) {
+                c = 0;
+            }
+
+            Match m = new Match(matchId1, 1, "Seizième", -1, -1, "", (byte) 0, idJoueur, (j2 > -1 ? j2 : -1), -1, -1, equipesRamasseurs.get(c++), equipesRamasseurs.get(c++), rId1);
             ReservCourt reserv = new ReservCourt(rId1, court, matchId1, -1, heure, minute, jour);
 
             p.addNewMatch(m);
@@ -155,9 +165,8 @@ public class PlanningController {
                     date = "21/05";
                     break;
             }
-            
-            
-            Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", date, m.getEtape()};
+
+            Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", date, m.getEtape(), m.getIdEquipeRamasseurs() + " et " + m.getIdEquipeRamasseurs2()};
             planningSimple.addRow(row);
         }
     }
@@ -167,7 +176,7 @@ public class PlanningController {
             getAll();
         }
 
-        if (!(Planning.getPlannings().get(0).getMatchs().isEmpty())) {
+        if (!(Planning.getPlannings().get(1).getMatchs().isEmpty())) {
             return 1;
         } else {
             return 0;
@@ -176,12 +185,16 @@ public class PlanningController {
     }
 
     public static void confirmPlanningSimple() {
-        Planning p = Planning.getPlannings().get(0);
+        Planning p = Planning.getPlannings().get(1);
         DAOReservCourt.clearReservation(1);
+        DAOBillet.clearPlaceFromBillet();
+        DAOReservPlace.clearReservPlace();
         DAOMatchs.clearMatchs(1);
+        System.out.println(p.getNewMatchs());
         DAOMatchs.putMatchList(p.getNewMatchs());
-        for(Match m : p.getNewMatchs()){
+        for (Match m : p.getNewMatchs()) {
             ReservCourt r = ReservCourt.findReserv(m.getIdMatch());
+           
             DAOReservCourt.addReservation(r);
         }
     }
