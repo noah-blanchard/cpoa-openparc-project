@@ -105,7 +105,7 @@ const Reserver = () => {
             return p.tribune == tribune;
         })
 
-        console.log(tabPlace);
+    
 
         return tabPlace.map(p => {
             return <MenuItem key={p.id} value={p.id}>Place {p.id} - Cat {p.cat}</MenuItem>
@@ -136,7 +136,7 @@ const Reserver = () => {
 
             for (let reserv of response.data.reservations) {
                 lesMatchs.push(reserv);
-                console.log(reserv)
+              
 
                 // let split = response2.data.idMatch.split("/");
                 // response2.data.idCourt = parseInt(response2.data.idCourt[response2.data.idCourt.length - 1]);
@@ -162,7 +162,6 @@ const Reserver = () => {
                 setJoueurs(tab);
             }
 
-            console.log(lesMatchs)
             setLesPlaces(places.data["hydra:member"]);
             setMatchs(lesMatchs);
             setChargement(false);
@@ -174,10 +173,10 @@ const Reserver = () => {
     }
 
     const handleSubmit = (e) => {
-        console.log("HELLo")
+     
 
         if (passConf == pass) {
-            console.log("hello2")
+     
             if (nom.length > 0 && prenom.length > 0 && email.length > 0 && pass.length > 0) {
 
                 newBillet();
@@ -207,14 +206,6 @@ const Reserver = () => {
 
 
 
-
-
-            console.log({
-                jour: parseInt(id),
-                prix: 25,
-                place: "api/reserv_places/" + idR
-            })
-
             let idClient
             response = await axios.post("https://cpoa.noahblanchard.fr/api/clients", {
                 nom: nom,
@@ -225,6 +216,13 @@ const Reserver = () => {
                 prenom: prenom
             })
             idClient = await response.data.id;
+
+            console.log({
+                jour: parseInt(id),
+                prix: prix,
+                place: idR,
+                client: "api/clients/" + idClient
+            })
 
             response = await axios.post("https://cpoa.noahblanchard.fr/api/billets", {
                 jour: parseInt(id),
@@ -263,7 +261,7 @@ const Reserver = () => {
         e.preventDefault();
         calcPrix();
         setValidate(!validate)
-        console.log(place);
+     
     }
 
     const calcPrix = async () => {
