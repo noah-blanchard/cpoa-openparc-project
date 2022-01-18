@@ -32,6 +32,8 @@ import models.ReservCourt;
 public class PlanningController {
 
     public static void getAll() {
+        
+        ReservCourt.getReservations().clear();
 
         try {
             ResultSet plannings = DAOPlanning.getPlannings();
@@ -40,6 +42,7 @@ public class PlanningController {
                 getMatchByPlanning(p);
                 System.out.println(p);
             }
+             DAOReservCourt.getReservations();
         } catch (SQLException ex) {
             Logger.getLogger(JoueurController.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -54,8 +57,12 @@ public class PlanningController {
                         matchs.getInt("id_vainqueur"), matchs.getInt("id_perdant"), matchs.getString("score"), matchs.getByte("est_double"),
                         matchs.getInt("id_joueur1"), matchs.getInt("id_joueur2"), matchs.getInt("id_equipe1"), matchs.getInt("id_equipe2"), matchs.getInt("id_equipe_ramasseurs"), matchs.getInt("id_equipe_ramasseurs2"), matchs.getInt("reservations"));
 
+                
+
                 p.getMatchs().add(m);
             }
+            
+           
         } catch (SQLException ex) {
             Logger.getLogger(JoueurController.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -165,8 +172,9 @@ public class PlanningController {
                     date = "21/05";
                     break;
             }
-
-            Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", date, m.getEtape(), m.getIdEquipeRamasseurs() + " et " + m.getIdEquipeRamasseurs2()};
+            
+         
+            Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD",date, m.getEtape(), m.getIdEquipeRamasseurs() + " et " + m.getIdEquipeRamasseurs2()};
             planningSimple.addRow(row);
         }
     }
@@ -194,8 +202,88 @@ public class PlanningController {
         DAOMatchs.putMatchList(p.getNewMatchs());
         for (Match m : p.getNewMatchs()) {
             ReservCourt r = ReservCourt.findReserv(m.getIdMatch());
-           
+
             DAOReservCourt.addReservation(r);
         }
+    }
+
+    public static void addTableRowsVisual(DefaultTableModel tableModel, int planning) {
+        
+        tableModel.setRowCount(0);
+        
+        
+        if (Joueur.getInstances().isEmpty()) {
+            JoueurController.getJoueurs();
+        }
+
+        Planning p = Planning.getPlannings().get(planning);
+        p.getMatchs().clear();
+        
+        
+        for (ReservCourt r : ReservCourt.getReservations()){
+            Match m = Match.findMatchById(r.getIdMatch());
+            
+            Joueur j1 = Joueur.findById(m.getIdJoueur1());
+            Joueur j2 = null;
+            if (m.getIdJoueur2() != -1) {
+                j2 = Joueur.findById(m.getIdJoueur2());
+
+            }
+
+            System.out.println(m);
+
+            String date = "";
+
+            ReservCourt reserv = ReservCourt.findReserv(m.getIdMatch());
+
+            switch (reserv.getJour()) {
+                case (1):
+                    date = "14/05";
+                    break;
+                case (2):
+                    date = "15/05";
+                    break;
+                case (3):
+                    date = "16/05";
+                    break;
+                case (4):
+                    date = "17/05";
+                    break;
+                case (5):
+                    date = "18/05";
+                    break;
+                case (6):
+                    date = "19/05";
+                    break;
+                case (7):
+                    date = "20/05";
+                    break;
+                case (8):
+                    date = "21/05";
+                    break;
+            }
+
+               Joueur vainqueur = null;
+            
+            if(m.getIdVainqueur() != -1){
+                vainqueur = Joueur.findById(m.getIdVainqueur());
+            }
+
+
+            /*System.out.println(m.getIdMatch());
+            System.out.println(reserv.getIdCourt());
+            System.out.println(reserv.getHeure() + " : " + reserv.getMinute());
+            System.out.println(j1.getNom());
+            System.out.println(m.getIdMatch());
+            System.out.println(m.getIdMatch());
+            System.out.println(m.getIdMatch());*/
+
+            Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", m.getIdVainqueur() == -1 ? "TBD" : vainqueur.getNom(), m.getScore(), date, m.getEtape(), m.getIdEquipeRamasseurs() + " et " + m.getIdEquipeRamasseurs2()};
+            System.out.println(row);
+            tableModel.addRow(row);
+            
+        }
+        
+
     }
 }

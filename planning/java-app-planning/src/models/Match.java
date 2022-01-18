@@ -202,6 +202,15 @@ public class Match {
         
         return matchList;
     }
+    
+    public static Match findMatchById(int id){
+        for(Match m : instances){
+            if(m.getIdMatch() == id){
+                return m;
+            }
+        }
+        return null;
+    }
 
     @Override
     public String toString() {

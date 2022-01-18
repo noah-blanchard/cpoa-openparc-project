@@ -100,6 +100,10 @@ public class ReservCourt {
         this.jour = jour;
     }
 
+    public static ArrayList<ReservCourt> getReservations(){
+        return reservations;
+    }
+    
     @Override
     public String toString() {
         return "ReservCourt{" + "idReservation=" + idReservation + ", idCourt=" + idCourt + ", idMatch=" + idMatch + ", idJoueur=" + idJoueur + ", heure=" + heure + ", minute=" + minute + ", jour=" + jour + '}';
