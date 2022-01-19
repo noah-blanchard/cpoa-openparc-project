@@ -277,6 +277,9 @@ public class PlanningController {
             System.out.println(m.getIdMatch());
             System.out.println(m.getIdMatch());
             System.out.println(m.getIdMatch());*/
+                System.out.println("ERREUR APRE CA");
+                System.out.println(m);
+                System.out.println(r);
                 Object[] row = {m.getIdMatch(), reserv.getIdCourt(), reserv.getHeure() + ":" + reserv.getMinute(), j1.getNom(), (j2 != null) ? j2.getNom() : "TBD", m.getIdVainqueur() == -1 ? "TBD" : vainqueur.getNom(), m.getScore(), date, m.getEtape(), m.getIdEquipeRamasseurs() + " et " + m.getIdEquipeRamasseurs2()};
                 System.out.println(row);
                 tableModel.addRow(row);
