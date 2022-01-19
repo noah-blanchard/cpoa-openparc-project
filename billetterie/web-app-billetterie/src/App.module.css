@@ -37,7 +37,7 @@
 li.link{
     width:30%; 
     height:100%; 
-
+    font-size: 1em;
     align-items: center;
     display: flex;
     justify-content: center;

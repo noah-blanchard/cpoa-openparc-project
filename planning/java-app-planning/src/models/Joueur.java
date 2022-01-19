@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * @author matan
  */
 public class Joueur extends Personne {
+    
+    private static Joueur loggedUser = null;
 
     private static ArrayList<Joueur> instances = new ArrayList<Joueur>();
     private static ArrayList<Joueur> jSimple = new ArrayList<Joueur>();
@@ -25,6 +27,14 @@ public class Joueur extends Personne {
             }
         }
         return null;
+    }
+    
+    public static Joueur getLoggedUser(){
+        return loggedUser;
+    }
+    
+    public static void setLoggedUser(Joueur j){
+        loggedUser = j;
     }
     private int classement;
     private String groupe;

@@ -44,6 +44,11 @@ public class StartingFrame extends javax.swing.JFrame {
 
         joueurConnect.setText("Je suis un Joueur");
         joueurConnect.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        joueurConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                joueurConnectActionPerformed(evt);
+            }
+        });
 
         bienvenueLabel.setText("Bienvenue sur l'application de gestion Open Parc Lyon 2022");
 
@@ -63,7 +68,7 @@ public class StartingFrame extends javax.swing.JFrame {
                 .addGap(63, 63, 63)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(bienvenueLabel)
-                    .addComponent(adminConnect, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                    .addComponent(adminConnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(joueurConnect, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(joueurConnect1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(55, Short.MAX_VALUE))
@@ -94,14 +99,18 @@ public class StartingFrame extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_joueurConnect1ActionPerformed
 
+    private void joueurConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_joueurConnectActionPerformed
+        this.dispose();
+        LoginJoueur.showFrame();// TODO add your handling code here:
+    }//GEN-LAST:event_joueurConnectActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    
     public static void main(String[] args) {
         showFrame();
     }
-    
+
     public static void showFrame() {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

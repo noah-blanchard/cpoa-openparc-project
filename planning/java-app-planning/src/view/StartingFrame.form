@@ -27,7 +27,7 @@
               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="bienvenueLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="adminConnect" pref="325" max="32767" attributes="0"/>
+                  <Component id="adminConnect" max="32767" attributes="0"/>
                   <Component id="joueurConnect" alignment="0" max="32767" attributes="0"/>
                   <Component id="joueurConnect1" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -66,6 +66,9 @@
         <Property name="text" type="java.lang.String" value="Je suis un Joueur"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="joueurConnectActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="bienvenueLabel">
       <Properties>

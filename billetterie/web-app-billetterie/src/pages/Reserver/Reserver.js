@@ -105,7 +105,7 @@ const Reserver = () => {
             return p.tribune == tribune;
         })
 
-    
+
 
         return tabPlace.map(p => {
             return <MenuItem key={p.id} value={p.id}>Place {p.id} - Cat {p.cat}</MenuItem>
@@ -136,7 +136,7 @@ const Reserver = () => {
 
             for (let reserv of response.data.reservations) {
                 lesMatchs.push(reserv);
-              
+
 
                 // let split = response2.data.idMatch.split("/");
                 // response2.data.idCourt = parseInt(response2.data.idCourt[response2.data.idCourt.length - 1]);
@@ -173,10 +173,10 @@ const Reserver = () => {
     }
 
     const handleSubmit = (e) => {
-     
+
 
         if (passConf == pass) {
-     
+
             if (nom.length > 0 && prenom.length > 0 && email.length > 0 && pass.length > 0) {
 
                 newBillet();
@@ -263,7 +263,7 @@ const Reserver = () => {
         e.preventDefault();
         calcPrix();
         setValidate(!validate)
-     
+
     }
 
     const calcPrix = async () => {
@@ -382,6 +382,7 @@ const Reserver = () => {
 
                                     <InputLabel id="demo-simple-select-label">Match</InputLabel>
                                     <Select
+
                                         labelId="demo-simple-select-label"
                                         id="demo-simple-select"
                                         value={selected}
@@ -446,6 +447,7 @@ const Reserver = () => {
                                 <h3>Code promo ou numéro de licence</h3>
 
                                 <TextField
+                                    size="small"
                                     id="outlined"
                                     helperText="Code promo ou numéro de licence"
                                     label="Code Promo"
@@ -458,6 +460,7 @@ const Reserver = () => {
                                 <h3>Entrez vos infos personnelles</h3>
                                 <TextField
                                     required
+                                    size="small"
                                     id="outlined-required"
                                     label="Nom"
                                     defaultValue=""
@@ -468,6 +471,7 @@ const Reserver = () => {
                                 />
                                 <TextField
                                     required
+                                    size="small"
                                     id="outlined-required"
                                     label="Prenom"
                                     defaultValue=""
@@ -478,6 +482,7 @@ const Reserver = () => {
                                     disabled={!selected ? true : false}
                                 />
                                 <TextField
+                                    size="small"
                                     id="outlined-number"
                                     label="Age"
                                     type="number"
@@ -488,6 +493,7 @@ const Reserver = () => {
                                     }}
                                 />
                                 <TextField
+                                    size="small"
                                     required
                                     id="outlined-required"
                                     label="Email"
@@ -499,6 +505,7 @@ const Reserver = () => {
                                     disabled={!selected ? true : false}
                                 />
                                 <TextField
+                                    size="small"
                                     required
                                     id="outlined-required"
                                     label="Telephone"
@@ -508,6 +515,7 @@ const Reserver = () => {
                                     onChange={(e) => setTel(e.target.value)}
                                 />
                                 <TextField
+                                    size="small"
                                     required
                                     id="outlined-password-input"
                                     label="Code secret"

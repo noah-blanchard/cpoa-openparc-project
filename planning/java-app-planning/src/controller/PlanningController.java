@@ -184,6 +184,8 @@ public class PlanningController {
             getAll();
         }
 
+        System.out.println(Planning.getPlannings().get(1).getMatchs());
+        
         if (!(Planning.getPlannings().get(1).getMatchs().isEmpty())) {
             return 1;
         } else {

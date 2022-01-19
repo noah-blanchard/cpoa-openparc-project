@@ -19,6 +19,11 @@ import models.Joueur;
  * @author matan
  */
 public class JoueurController {
+    
+    public static boolean login(String nom, String telephone){
+        return DAOJoueur.loginJoueur(nom, telephone);
+    }
+    
     public static void getJoueurs(){
         try {
             ResultSet joueurs = DAOJoueur.getJoueurs();
