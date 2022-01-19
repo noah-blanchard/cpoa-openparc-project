@@ -53,6 +53,49 @@ public class DAOReservCourt {
         }
     }
 
+    public static boolean deleteReservation(ReservCourt r) {
+        try {
+            PreparedStatement ps = null;
+            ds = MySqlDataSource.getDataSource();
+            c = ds.getConnection();
+            
+            String sql = "DELETE FROM reservation WHERE id = ?";
+            ps = c.prepareStatement(sql);
+            
+            ps.setInt(1, r.getIdReservation());
+            ps.executeUpdate();
+            
+            
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReservCourt.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public static ResultSet getReservationsJoueur(Joueur j) {
+        ResultSet rs = null;
+        try {
+
+            PreparedStatement ps = null;
+            ds = MySqlDataSource.getDataSource();
+            c = ds.getConnection();
+
+            String sql = "SELECT * FROM reservation WHERE id_joueur = ? ORDER BY jour, heure asc";
+
+            ps = c.prepareStatement(sql);
+            ps.setInt(1, j.getId());
+
+            rs = ps.executeQuery();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOReservCourt.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return rs;
+
+    }
+
     public static void clearReservation(int planning) {
         try {
             PreparedStatement ps = null;
@@ -107,7 +150,7 @@ public class DAOReservCourt {
             while (rs.next()) {
                 ReservCourt reserv = new ReservCourt(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(7), rs.getInt(4), rs.getInt(5), rs.getInt(6));
             }
-            
+
             Collections.sort(ReservCourt.getReservations(), new ReservationComparator());
             System.out.println(ReservCourt.getReservations());
         } catch (SQLException ex) {

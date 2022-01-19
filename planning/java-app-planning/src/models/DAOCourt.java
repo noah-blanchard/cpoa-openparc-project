@@ -64,12 +64,8 @@ public class DAOCourt {
             String sql = "INSERT INTO reservation(id_court_id, id_match_id, heure, minute, jour, id_joueur) VALUES(?,?,?,?,?,?)";
             
             ps = c.prepareStatement(sql);
-            ps.setInt(1, r.getIdCourt());
-            ps.setInt(2, -1);
-            ps.setInt(3, r.getHeure());
-            ps.setInt(4, r.getMinute());
-            ps.setInt(5, r.getJour());
-            ps.setInt(6, r.getIdJoueur());
+            ps.setInt(1, r.getIdCourt()); ps.setInt(2, -1); ps.setInt(3, r.getHeure());
+            ps.setInt(4, r.getMinute()); ps.setInt(5, r.getJour()); ps.setInt(6, r.getIdJoueur());
             
             ps.executeUpdate();
             
@@ -78,8 +74,7 @@ public class DAOCourt {
         } catch (SQLException ex) {
             Logger.getLogger(DAOCourt.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }
-        
+        }      
        
     }
 

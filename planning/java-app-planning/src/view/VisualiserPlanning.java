@@ -7,6 +7,7 @@ package view;
 
 import controller.PlanningController;
 import javax.swing.table.DefaultTableModel;
+import models.Match;
 
 /**
  *
@@ -54,6 +55,11 @@ public class VisualiserPlanning extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTable3);
 
         jButton1.setText("Modifier un match");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Précédent");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -109,6 +115,16 @@ public class VisualiserPlanning extends javax.swing.JFrame {
         this.dispose();
         AdminMenu.showFrame();// TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int r = jTable3.getSelectedRow();
+        Match m = Match.findMatchById(Integer.parseInt(String.valueOf(jTable3.getValueAt(r, 0))));
+        if(m != null){
+            this.dispose();
+            SaisieScore.showFrame(m);
+        }
+// TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -278,7 +278,7 @@ public class ReservationJoueur extends javax.swing.JFrame {
         jourCombo.addElement("Mardi 18");
         jourCombo.addElement("Mercredi 19");
         jourCombo.addElement("Jeudi 20");
-        jourCombo.addElement("vendredi 21");
+        jourCombo.addElement("Vendredi 21");
         jourCombo.addElement("Samedi 22");
 
         for (int i = 0; i < 24; i++) {

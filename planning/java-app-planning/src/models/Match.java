@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class Match {
 
+    private static Match selectMatch = null;
+    
     private static ArrayList<Match> instances = new ArrayList<Match>();
     
     private int idMatch;

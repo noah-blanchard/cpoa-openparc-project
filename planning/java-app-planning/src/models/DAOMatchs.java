@@ -102,4 +102,26 @@ public class DAOMatchs {
             Logger.getLogger(DAOMatchs.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static boolean updateMatch(Match m){
+        try {
+            PreparedStatement ps = null;
+            ds = MySqlDataSource.getDataSource();
+            c = ds.getConnection();
+
+            System.out.println(m.getScore().getClass());
+            
+            ps = c.prepareStatement("UPDATE rencontre SET score = ?, id_vainqueur = ? WHERE id = ?");
+            ps.setString(1, m.getScore()); ps.setInt(2, m.getIdVainqueur()); ps.setInt(3, m.getIdMatch());
+            ps.executeUpdate();
+            
+            return true;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(DAOMatchs.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+        
+    }
 }

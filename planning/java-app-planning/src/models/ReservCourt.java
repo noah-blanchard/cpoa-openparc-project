@@ -21,6 +21,15 @@ public class ReservCourt {
         }
         return null;
     }
+    
+    public static ReservCourt getReservCourtById(int id){
+        for(ReservCourt r : reservations) {
+            if(r.getIdReservation() == id){
+                return r;
+            }
+        }
+        return null;
+    }
 
     private int idReservation;
     private int idCourt;
@@ -43,6 +52,8 @@ public class ReservCourt {
         
         reservations.add(this);
     }
+    
+   
 
     public int getIdReservation() {
         return idReservation;
