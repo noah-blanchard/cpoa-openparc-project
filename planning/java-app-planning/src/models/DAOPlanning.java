@@ -31,7 +31,7 @@ public class DAOPlanning {
             ds = MySqlDataSource.getDataSource();
             c = ds.getConnection();
 
-            String sql = "SELECT * FROM planning";
+            String sql = "SELECT * FROM planning WHERE id > 0";
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
 
@@ -52,7 +52,7 @@ public class DAOPlanning {
             ds = MySqlDataSource.getDataSource();
             c = ds.getConnection();
 
-            String sql = "SELECT * FROM rencontre WHERE id_planning_id = ?";
+            String sql = "SELECT * FROM rencontre WHERE id > 0 AND id_planning_id = ?";
             ps = c.prepareStatement(sql);
             ps.setInt(1, p.getIdPlanning());
             rs = ps.executeQuery();

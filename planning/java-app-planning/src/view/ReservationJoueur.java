@@ -92,8 +92,6 @@ public class ReservationJoueur extends javax.swing.JFrame {
             }
         });
 
-        jComboBox3.setModel(heureCombo);
-
         jLabel3.setText("Nombre d'heure à réserver :");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
