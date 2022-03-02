@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BilletRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -16,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * )
  * @ORM\Entity(repositoryClass=BilletRepository::class)
  */
-class Billet    
+class Billet
 {
     /**
      * @ORM\Id
@@ -57,10 +58,14 @@ class Billet
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"write", "read"})
      */
     private $code;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hashedCode;
 
     public function getId(): ?int
     {
@@ -135,6 +140,18 @@ class Billet
     public function setCode(?string $code): self
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function getHashedCode(): ?string
+    {
+        return $this->hashedCode;
+    }
+
+    public function setHashedCode(string $hashedCode): self
+    {
+        $this->hashedCode = $hashedCode;
 
         return $this;
     }

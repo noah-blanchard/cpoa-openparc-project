@@ -115,9 +115,9 @@ const Reserver = () => {
 
 
     const getJoueurById = async (idJ, idJ2, idR) => {
-        let response = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + idJ);
+        let response = await axios.get("https://localhost:8000/api/joueurs/" + idJ);
         let data = await response.data;
-        let response2 = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + idJ2);
+        let response2 = await axios.get("https://localhost:8000/api/joueurs/" + idJ2);
         let data2 = await response2.data;
 
         const id = await {
@@ -130,8 +130,8 @@ const Reserver = () => {
     }
     const getMatchsPrincipal = async () => {
         try {
-            let response = await axios.get("https://cpoa.noahblanchard.fr/api/courts/1");
-            let places = await axios.get("https://cpoa.noahblanchard.fr/api/places");
+            let response = await axios.get("https://localhost:8000/api/courts/1");
+            let places = await axios.get("https://localhost:8000/api/places");
             let lesMatchs = []
 
             for (let reserv of response.data.reservations) {
@@ -150,8 +150,8 @@ const Reserver = () => {
             let tab = []
             if (lesMatchs.length > 0) {
                 for (let match of lesMatchs) {
-                    let joueur1 = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur1);
-                    let joueur2 = await axios.get("https://cpoa.noahblanchard.fr/api/joueurs/" + match.idMatch.idJoueur2);
+                    let joueur1 = await axios.get("https://localhost:8000/api/joueurs/" + match.idMatch.idJoueur1);
+                    let joueur2 = await axios.get("https://localhost:8000/api/joueurs/" + match.idMatch.idJoueur2);
 
                     tab.push({
                         idR: match.idMatch.id,
@@ -197,7 +197,7 @@ const Reserver = () => {
             let idR = -1;
 
             if (place != -1 && tribune != -1 && selected != -1) {
-                response = await axios.post("https://cpoa.noahblanchard.fr/api/reserv_places", {
+                response = await axios.post("https://localhost:8000/api/reserv_places", {
                     rencontre: "api/rencontres/" + selected,
                     place: "api/places/" + place
                 });
@@ -207,7 +207,7 @@ const Reserver = () => {
 
 
             let idClient
-            response = await axios.post("https://cpoa.noahblanchard.fr/api/clients", {
+            response = await axios.post("https://localhost:8000/api/clients", {
                 nom: nom,
                 telephone: tel,
                 email: email,
@@ -224,7 +224,7 @@ const Reserver = () => {
                 client: "api/clients/" + idClient
             })
 
-            response = await axios.post("https://cpoa.noahblanchard.fr/api/billets", {
+            response = await axios.post("https://localhost:8000/api/billets", {
                 jour: parseInt(id),
                 prix: prix,
                 place: idR,
@@ -271,7 +271,7 @@ const Reserver = () => {
         let cat = 2
         let p;
         if (place != -1) {
-            response = await axios.get("https://cpoa.noahblanchard.fr/api/places/" + place);
+            response = await axios.get("https://localhost:8000/api/places/" + place);
             cat = response.data.cat;
         }
 

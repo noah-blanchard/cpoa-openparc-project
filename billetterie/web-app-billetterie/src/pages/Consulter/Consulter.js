@@ -52,11 +52,11 @@ const Consulter = () => {
         let response
         if (billet.place != -1) {
             try {
-                response = await axios.get("https://cpoa.noahblanchard.fr/api/reserv_places/" + billet.place);
+                response = await axios.get("https://localhost:8000/api/reserv_places/" + billet.place);
                 let dataPlace = await response.data;
                 setPlace(dataPlace.place);
                 setRencontre(dataPlace.rencontre);
-                response = await axios.get("https://cpoa.noahblanchard.fr/api/reservations/" + dataPlace.rencontre.reservations);
+                response = await axios.get("https://localhost:8000/api/reservations/" + dataPlace.rencontre.reservations);
                 let dataReservation = await response.data;
                 setReserv(dataReservation);
             } catch (ex) {
@@ -66,7 +66,7 @@ const Consulter = () => {
     }
 
     const getBillet = async () => {
-        let response = await axios.get("https://cpoa.noahblanchard.fr/api/billets");
+        let response = await axios.get("https://localhost:8000/api/billets");
         let datas = await response.data;
 
         let bil = await datas["hydra:member"].find(b => {
