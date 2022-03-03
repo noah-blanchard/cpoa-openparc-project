@@ -1,4 +1,5 @@
 <?php
+// src/DataPersister/UserDataPersister.php
 
 namespace App\DataPersister;
 
@@ -7,13 +8,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class BilletDataPersister implements ContextAwareDataPersisterInterface{
+/**
+ *
+ */
+class BilletDataPersister implements ContextAwareDataPersisterInterface
+{
     private $_entityManager;
+    private $_passwordEncoder;
 
     public function __construct(
         EntityManagerInterface $entityManager,
+        UserPasswordEncoderInterface $passwordEncoder
     ) {
         $this->_entityManager = $entityManager;
+        $this->_passwordEncoder = $passwordEncoder;
     }
 
     /**
@@ -29,10 +37,15 @@ class BilletDataPersister implements ContextAwareDataPersisterInterface{
      */
     public function persist($data, array $context = [])
     {
-        if ($data->getCode()) {
-            $data->setHashedCode(
-                password_hash($data->getCode(), PASSWORD_DEFAULT)
+        if ($data->getPlainPassword()) {
+            $data->setPassword(
+                $this->_passwordEncoder->encodePassword(
+                    $data,
+                    $data->getPlainPassword()
+                )
             );
+
+            $data->eraseCredentials();
         }
 
         $this->_entityManager->persist($data);
@@ -47,6 +60,4 @@ class BilletDataPersister implements ContextAwareDataPersisterInterface{
         $this->_entityManager->remove($data);
         $this->_entityManager->flush();
     }
-
-
 }

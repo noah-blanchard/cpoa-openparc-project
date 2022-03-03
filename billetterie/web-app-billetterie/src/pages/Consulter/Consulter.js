@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './Consulter.module.css';
 
+
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
@@ -69,17 +70,19 @@ const Consulter = () => {
         let response = await axios.get("https://localhost:8000/api/billets");
         let datas = await response.data;
 
-        let bil = await datas["hydra:member"].find(b => {
-            return b.email == email && b.code == pass
-        });
+        console.log(datas["hydra:member"]);
 
-        if (!bil) {
-            setError(true);
-            setBillet(null);
-        } else {
-            setError(false);
-            setBillet(bil);
-        }
+       // let bil = await datas["hydra:member"].find(b => {
+         //   return b.email == email && bcrypt.compare(pass, b.hashedCode);
+        //});
+
+        // if (!bil) {
+        //     setError(true);
+        //     setBillet(null);
+        // } else {
+        //     setError(false);
+        //     setBillet(bil);
+        // }
 
     }
 

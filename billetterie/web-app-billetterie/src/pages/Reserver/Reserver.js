@@ -230,13 +230,13 @@ const Reserver = () => {
                 place: idR,
                 client: "api/clients/" + idClient,
                 email: email,
-                code: pass
+                plainPassword: pass
             });
             let idBillet = await response.data.id;
 
             navigate("/confirmation/" + idBillet);
         } catch (ex) {
-            alert("Erreur")
+            alert(ex);
         }
     }
 
