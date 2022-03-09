@@ -15,3 +15,12 @@ Le but du module planning est de faire une application Java permettant la géné
 L'application se présente sous la forme d'une interface graphique proposant les différentes fonctionnalité.
 
 ![interface_swing1](https://user-images.githubusercontent.com/17174941/157525049-8d5484ad-985b-4ad3-a315-3875236f1f2e.png)
+
+## Liste totales des fonctionnalités
+
+* Générer un planning
+* Ecraser un planning
+* Consulter un planning
+* Saisir les score
+* Saisir le vainqueur d'un match
+* Réserver un terrain pour de l'entraînement
