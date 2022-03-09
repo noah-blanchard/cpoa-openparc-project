@@ -35,7 +35,7 @@ pour les Clients de retrOuver leurs reservation grace a une adresse emall et un 
 
 L'interfāce utilisateur est une application web monopage dévéloppêe ā l'aide de la bibliothéque **React.js** et de l'environnement **Create React App**.
 
-![React-icon svg](https://user-images.githubusercontent.com/17174941/157527435-b0c80fe1-2040-49bf-8a48-8aa41b4a1924.png = 30x30)
+![React-icon svg](https://user-images.githubusercontent.com/17174941/157527435-b0c80fe1-2040-49bf-8a48-8aa41b4a1924.png =30x30)
 ![Image2](https://user-images.githubusercontent.com/17174941/157527797-7dc29dab-2aaf-4255-91b3-93ed5afdb3e5.png)![Image3](https://user-images.githubusercontent.com/17174941/157527808-cb84ecc9-416d-465c-bb8b-436299f3eb27.png)
 
 
