@@ -63,7 +63,15 @@ La base de données est une base de données relationnelle fonctionnant grâce �
 Le projet respecte le design pattern MVC, on retrouve donc des models et des controllers correspondants aux tables de la base de données.
 
 <details close>
-<summary> Base de données>
+<summary>Base de données</summary>
   
 ![bdd](https://user-images.githubusercontent.com/17174941/157530901-474b8e36-3114-492a-9bcb-fb30b82f838c.png)
+
+</details>
+
+<details close>
+  <summary>Projet JAVA</summary>
+  
+  ![Image5](https://user-images.githubusercontent.com/17174941/157531406-f804f08f-49db-47d0-8320-d00a0b575f33.png)
+  
 </details>
