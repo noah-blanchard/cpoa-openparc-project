@@ -44,5 +44,6 @@ L'interfāce utilisateur est une application web monopage dévéloppêe ā l'aid
 ## Le serveur
 
 Pour la partie back-end de l'application web, nous avons fait appel à une API développée à l'aide de Symfony et API Platform. L'application React fait tout simplement des requêtes vers dle serveur PHP qui s'occupe ensuited de faire des requpetes vers la base de donnée en fonction des endpoints sur lesquels les requêtes sont effectuées.
+
 ![index](https://user-images.githubusercontent.com/17174941/157529492-50829bfa-c807-4a06-85ac-cfe72d84001c.png)
 ![13420081](https://user-images.githubusercontent.com/17174941/157529663-091520d2-c656-469a-bffd-e8f808ff3f79.png)
