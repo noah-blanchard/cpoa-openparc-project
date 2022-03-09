@@ -24,3 +24,20 @@ L'application se présente sous la forme d'une interface graphique proposant les
 * Saisir les score
 * Saisir le vainqueur d'un match
 * Réserver un terrain pour de l'entraînement
+
+# Module Billetterie
+
+Le but du module billetterie est de proposer aux spectateurs une plateforme facile d'utilisation sur laquelle ils peuvent réserver leurs billets pour les differents
+Jours et differents mat chs . L"utilisateur reserve un match, entre ses informations personnelles et l'application simule un palement reussl. Ll est ensuite possible
+pour les Clients de retrOuver leurs reservation grace a une adresse emall et un code secret.
+
+## L'interface utilisateur
+
+L'interfāce utilisateur est une application web monopage dévéloppêe ā l'aide de la bibliothéque **React.js** et de l'environnement **Create React App**.
+
+![React-icon svg](https://user-images.githubusercontent.com/17174941/157527435-b0c80fe1-2040-49bf-8a48-8aa41b4a1924.png)
+![Image2](https://user-images.githubusercontent.com/17174941/157527797-7dc29dab-2aaf-4255-91b3-93ed5afdb3e5.png)![Image3](https://user-images.githubusercontent.com/17174941/157527808-cb84ecc9-416d-465c-bb8b-436299f3eb27.png)
+
+
+
+## 
