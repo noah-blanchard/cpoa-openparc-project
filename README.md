@@ -56,13 +56,14 @@ Pour la partie back-end de l'application web, nous avons fait appel à une API d
 
 Le coeur du projet était d'utilsier une base de données unifiée et commune aux deux modules. Les matchs générés par l'application Java doivent être accessible sur la plateforme de billetterie, et les lcients doivent pouvoir réserver leur place pour chacun d'eux.
 La base de données est une base de données relationnelle fonctionnant grâce à SQL et au SGBD MySQL.
-![1200px-MySQL svg](https://user-images.githubusercontent.com/17174941/157530335-c1458168-551f-4d89-a980-c11fa6d0145b.png)
+<img src="https://user-images.githubusercontent.com/17174941/157530335-c1458168-551f-4d89-a980-c11fa6d0145b.png" height="150px" width="150px">
 
 # Structure du projet
 
 Le projet respecte le design pattern MVC, on retrouve donc des models et des controllers correspondants aux tables de la base de données.
 
 <details close>
-<summary Base de données>
+<summary> Base de données>
+  
 ![bdd](https://user-images.githubusercontent.com/17174941/157530901-474b8e36-3114-492a-9bcb-fb30b82f838c.png)
 </details>
