@@ -31,6 +31,10 @@ Le but du module billetterie est de proposer aux spectateurs une plateforme faci
 Jours et differents mat chs . L"utilisateur reserve un match, entre ses informations personnelles et l'application simule un palement reussl. Ll est ensuite possible
 pour les Clients de retrOuver leurs reservation grace a une adresse emall et un code secret.
 
+Les mots de passes utilisés sont chiffrés pour une meilleur sécurité.
+
+![Screenshot_1](https://user-images.githubusercontent.com/17174941/157530701-c077b114-82fe-4b4c-a90d-89c36a45e419.png)
+
 ## L'interface utilisateur
 
 L'interfāce utilisateur est une application web monopage dévéloppêe ā l'aide de la bibliothéque **React.js** et de l'environnement **Create React App**.
@@ -47,3 +51,18 @@ Pour la partie back-end de l'application web, nous avons fait appel à une API d
 
 ![index](https://user-images.githubusercontent.com/17174941/157529492-50829bfa-c807-4a06-85ac-cfe72d84001c.png)
 ![13420081](https://user-images.githubusercontent.com/17174941/157529663-091520d2-c656-469a-bffd-e8f808ff3f79.png)
+
+## La base de données
+
+Le coeur du projet était d'utilsier une base de données unifiée et commune aux deux modules. Les matchs générés par l'application Java doivent être accessible sur la plateforme de billetterie, et les lcients doivent pouvoir réserver leur place pour chacun d'eux.
+La base de données est une base de données relationnelle fonctionnant grâce à SQL et au SGBD MySQL.
+![1200px-MySQL svg](https://user-images.githubusercontent.com/17174941/157530335-c1458168-551f-4d89-a980-c11fa6d0145b.png)
+
+# Structure du projet
+
+Le projet respecte le design pattern MVC, on retrouve donc des models et des controllers correspondants aux tables de la base de données.
+
+<details close>
+<summary Base de données>
+![bdd](https://user-images.githubusercontent.com/17174941/157530901-474b8e36-3114-492a-9bcb-fb30b82f838c.png)
+</details>
